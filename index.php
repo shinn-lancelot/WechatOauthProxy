@@ -3,46 +3,62 @@
 use wxOauthProxy\Wxoauth;
 
 $code = $_GET['code'];
-$oauthType = $_REQUEST['oauth_type'];
-$scope = $_REQUEST['scope'];
 $proxyScope = $_REQUEST['proxy_scope'];
+$proxyScope = $proxyScope ? $proxyScope : 1;    // 代理操作作用域，默认仅获取code 1:仅获取code 2:获取用户openid或完整信息
 $state = $_REQUEST['state'];
+$state = $state ? $state : getNonceStr();
+
+// 有code且代理作用域为1（仅获取code），直接跳转回请求源
+if(!empty($code) && $proxyScope == 1){
+    $redirectUri = $_SESSION['redirect_uri'];
+    if(!empty($redirectUri)){
+        header('Location:' . $redirectUri . '&code=' . $code . '&state=' . $state);
+    }else{
+        exit();
+    }
+}
 
 $appId = $_REQUEST['app_id'];
 $appSecret = $_REQUEST['app_secret'];
-$oauthType = $oauthType ? $oauthType : 1;
-$state = $state ? $state : getNonceStr();
+$oauthType = $_REQUEST['oauth_type'];
+$oauthType = $oauthType ? $oauthType : 1;   //授权类型，默认公众号授权 1:公众号授权 2:开放平台网页授权
+$scope = $_REQUEST['scope'];
 $scope = $scope ? $scope : 'snsnsapi_userinfo';
-$proxyRedirectUri = getProtocol() . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-$proxyScope = $proxyScope ? $proxyScope : 1;    // 代理操作作用域， 1:仅获取code 2:获取用户openid或完整信息
+
+$protocol = isHttps() ? 'https' : 'http';
+$requestUri = $proxyScope == 2 ? '/'.http_build_query(array('appid'=>$appId,'secret'=>$appSecret)) : '';
+$proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $requestUri;
 $redirectUri = $_REQUEST['redirect_uri'];
 
-$argArr = array(
-    'appId'=>$appId,
-    'appSecret'=>$appSecret,
-    'oauthType'=>$oauthType,
-    'state'=>$state,
-    'scope'=>$scope,
-    'proxyRedirectUri'=>$proxyRedirectUri,
-    'proxyScope'=>$proxyScope
-);
-
 if(empty($code)){
-    $wxOauth = new Wxoauth($argArr);
-    $wxOauth::toGetCode();
-}else if($proxyScope == 1){
-    if(!empty($redirectUri)){
-        header('Location:' . $redirectUri . '&code=' . $code . '&state=' . $state);
-    }
+    $_SESSION['redirect_uri'] = $redirectUri;
+    $paramsArr = array(
+        'appid'=>$appId,
+        'redirect_uri'=>urlencode($proxtRedirectUri),
+        'response_type'=>'code',
+        'scope'=>$scope,
+        'state'=>$state
+    );
+    Wxoauth::toGetCode($paramsArr,$oauthType);
+    
 }else if($proxyScope == 2){
-
+    // 进一步获取用户信息
 }
 
 
-
-
-function getProtocol() {
-    return 'http';
+/**
+ * 通用函数
+ */
+function isHttps() {
+    if(!isset($_SERVER['HTTPS']))  return false;
+    if($_SERVER['HTTPS'] === 1){  //Apache
+        return true;
+    }elseif($_SERVER['HTTPS'] === 'on'){ //IIS
+        return true;
+    }elseif($_SERVER['SERVER_PORT'] == 443){ //其他
+        return true;
+    }
+    return false;
 }
 
 function getNonceStr($length = 32) {

@@ -3,38 +3,77 @@
 namespace wxOauthProxy;
 
 class Wxoauth {
-    private static $appId = ''; // 公众号appid
-    private static $appSecret = ''; // 公众号appsecret
-    private static $oauthType = '';  // 授权类型，默认公众号授权登录 1:公众号授权登录 2:微信网页第三方登录
-    private static $state = ''; // 授权重定向参数
-    private static $scope = ''; //授权作用域，snsapi_base|snsapi_userinfo
-    private static $proxyRedirectUri = '';   // 代理操作的uri
-
-    public function __construct($argArr = array()) {
-        static::$appId = $argArr['appId'];
-        static::$appSecret = $argArr['appSecret'];
-        static::$oauthType = $argArr['oauthType'];
-        static::$state = $argArr['state'];
-        static::$scope = $argArr['scope'];
-        static::$proxyRedirectUri = $argArr['proxyRedirectUri'];
-    }
-
-    // 获取code
-    public static function toGetCode() {
-        $codeUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?';
-        if(static::$oauthType == 2) {
-            $codeUrl = 'https://open.weixin.qq.com/connect/qrconnect?';
+    /**
+     * 获取code
+     * @param array $paramsArr
+     * @param $oauthType
+     */
+    public static function toGetCode($paramsArr = array(),$oauthType) {
+        $apiUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?';
+        if($oauthType == 2) {
+            $apiUrl = 'https://open.weixin.qq.com/connect/qrconnect?';
         }
 
-        $paramsArr = array(
-            'appid'=>static::$appId,
-            'redirect_uri'=>urlencode(static::$proxtRedirectUri),
-            'response_type'=>'code',
-            'scope'=>static::$scope,
-            'state'=>static::$state
-        );
-
-        $requestUrl = $codeUrl . http_build_query($paramsArr);
+        $requestUrl = $apiUrl . http_build_query($paramsArr) . '#wechat_redirect';
         header('Location:' . $requestUrl);
+    }
+
+    /**
+     * 获取access_token
+     * @param array $paramsArr
+     * @return mixed
+     */
+    public static function getAccessToken($paramsArr = array()) {
+        $apiUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
+
+        $requestUrl = $apiUrl . http_build_query($paramsArr);
+        return json_decode(Wxoauth::http_request($requestUrl),true);
+    }
+
+    /**
+     * 刷新access_token
+     * @param array $paramsArr
+     * @return mixed
+     */
+    public static function refreshAccessToken($paramsArr = array()){
+        $apiUrl = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?';
+
+        $requestUrl = $apiUrl . http_build_query($paramsArr);
+        return json_decode(Wxoauth::http_request($requestUrl),true);
+
+    }
+
+    /**
+     * 校验access_token
+     * @param array $paramsArr
+     * @return mixed
+     */
+    public static function checkAccessToken($paramsArr = array()){
+        $apiUrl = 'https://api.weixin.qq.com/sns/auth?';
+
+        $requestUrl = $apiUrl . http_build_query($paramsArr);
+        return json_decode(Wxoauth::http_request($requestUrl),true);
+
+    }
+
+    /**
+     * curl进行http请求
+     * @param $url
+     * @param null $data
+     * @return mixed
+     */
+    public static function http_request($url, $data = null){
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        if(!empty($data)){
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $output = curl_exec($curl);
+        curl_close($curl);
+        return $output;
     }
 }
