@@ -1,8 +1,8 @@
 <?php
 
-namespace wxOauthProxy;
+namespace WechatOauthProxy;
 
-class Wxoauth {
+class WechatOauth {
     /**
      * 获取code
      * @param array $paramsArr

@@ -1,7 +1,7 @@
 <?php
 
-use wxOauthProxy\Wxoauth;
-require __DIR__ . '/wxOauthProxy/Wxoauth.php';
+use WechatOauthProxy\WechatOauth;
+require __DIR__ . 'WechatOauthProxy/WechatOauth.php';
 
 $code = $_GET['code'];
 $proxyScope = $_REQUEST['proxy_scope'];
@@ -11,7 +11,7 @@ $state = $state ? $state : getNonceStr();
 
 // 有code且代理作用域为1（仅获取code），直接跳转回请求源
 if(!empty($code) && $proxyScope == 1){
-    $redirectUri = $_SESSION['redirect_uri'];
+    $redirectUri = $_COOKIE['redirect_uri'];
     if(!empty($redirectUri)){
         header('Location:' . $redirectUri . '&code=' . $code . '&state=' . $state);
     }else{
@@ -32,15 +32,15 @@ $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $requestUri;
 $redirectUri = $_REQUEST['redirect_uri'];
 
 if(empty($code)){
-    $_SESSION['redirect_uri'] = $redirectUri;
+    setCookie('redirect_uri', $redirectUri);
     $paramsArr = array(
         'appid'=>$appId,
-        'redirect_uri'=>urlencode($proxtRedirectUri),
+        'redirect_uri'=>$proxyRedirectUri,
         'response_type'=>'code',
         'scope'=>$scope,
         'state'=>$state
     );
-    Wxoauth::toGetCode($paramsArr,$oauthType);
+    WechatOauth::toGetCode($paramsArr, $oauthType);
     
 }else if($proxyScope == 2){
     // 进一步获取用户信息
