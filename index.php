@@ -1,6 +1,7 @@
 <?php
 
 use wxOauthProxy\Wxoauth;
+require __DIR__ . '/wxOauthProxy/Wxoauth.php';
 
 $code = $_GET['code'];
 $proxyScope = $_REQUEST['proxy_scope'];
