@@ -27,7 +27,7 @@ class WechatOauth {
         $apiUrl = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
 
         $requestUrl = $apiUrl . http_build_query($paramsArr);
-        return json_decode(Wxoauth::http_request($requestUrl),true);
+        return json_decode(WechatOauth::http_request($requestUrl),true);
     }
 
     /**
@@ -39,7 +39,7 @@ class WechatOauth {
         $apiUrl = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?';
 
         $requestUrl = $apiUrl . http_build_query($paramsArr);
-        return json_decode(Wxoauth::http_request($requestUrl),true);
+        return json_decode(WechatOauth::http_request($requestUrl),true);
 
     }
 
@@ -52,7 +52,7 @@ class WechatOauth {
         $apiUrl = 'https://api.weixin.qq.com/sns/auth?';
 
         $requestUrl = $apiUrl . http_build_query($paramsArr);
-        return json_decode(Wxoauth::http_request($requestUrl),true);
+        return json_decode(WechatOauth::http_request($requestUrl),true);
 
     }
 

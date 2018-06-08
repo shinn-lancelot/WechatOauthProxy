@@ -32,7 +32,7 @@ $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $requestUri;
 $redirectUri = $_REQUEST['redirect_uri'];
 
 if(empty($code)){
-    setCookie('redirect_uri', $redirectUri);
+    setCookie('redirect_uri', $redirectUri, 300);
     $paramsArr = array(
         'appid'=>$appId,
         'redirect_uri'=>$proxyRedirectUri,
