@@ -1,7 +1,7 @@
 <?php
 
 use WechatOauthProxy\WechatOauth;
-require __DIR__ . 'WechatOauthProxy/WechatOauth.php';
+require __DIR__ . '/WechatOauthProxy/WechatOauth.php';
 
 $code = $_GET['code'];
 $proxyScope = $_REQUEST['proxy_scope'];
@@ -32,7 +32,7 @@ $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $requestUri;
 $redirectUri = $_REQUEST['redirect_uri'];
 
 if(empty($code)){
-    setCookie('redirect_uri', $redirectUri, 300);
+    setCookie('redirect_uri', $redirectUri, time () + 300);
     $paramsArr = array(
         'appid'=>$appId,
         'redirect_uri'=>$proxyRedirectUri,
