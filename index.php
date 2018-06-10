@@ -5,17 +5,17 @@ require __DIR__ . '/WechatOauthProxy/WechatOauth.php';
 
 $code = $_GET['code'];
 $proxyScope = $_REQUEST['proxy_scope'];
-$proxyScope = $proxyScope ? $proxyScope : 1;    // 代理操作作用域，默认仅获取code 1:仅获取code 2:获取用户openid或完整信息
+$proxyScope = $proxyScope ? $proxyScope : 'code';    // 代理操作作用域，默认仅获取code 'code':仅获取code 'access_token':获取access_token及openid
 $state = $_REQUEST['state'];
 $state = $state ? $state : getNonceStr();
 
-// 有code且代理作用域为1（仅获取code），直接跳转回请求源
-if(!empty($code) && $proxyScope == 1){
+// 有code且代理作用域为code，拼接code和state参数，直接跳转回请求源
+if(!empty($code) && $proxyScope == 'code'){
     $redirectUri = $_COOKIE['redirect_uri'];
     if(!empty($redirectUri)){
         header('Location:' . $redirectUri . '&code=' . $code . '&state=' . $state);
     }else{
-        exit();
+        exit('授权登录失败，请退出重试');
     }
 }
 
@@ -27,10 +27,11 @@ $scope = $_REQUEST['scope'];
 $scope = $scope ? $scope : 'snsnsapi_userinfo';
 
 $protocol = isHttps() ? 'https' : 'http';
-$requestUri = $proxyScope == 2 ? '/'.http_build_query(array('appid'=>$appId,'secret'=>$appSecret)) : '';
+$requestUri = $proxyScope == 'access_token' ? '/'.http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret)) : '';
 $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $requestUri;
 $redirectUri = $_REQUEST['redirect_uri'];
 
+// code为空，进行重定向获取code
 if(empty($code)){
     setCookie('redirect_uri', $redirectUri, time () + 300);
     $paramsArr = array(
@@ -42,8 +43,61 @@ if(empty($code)){
     );
     WechatOauth::toGetCode($paramsArr, $oauthType);
     
-}else if($proxyScope == 2){
-    // 进一步获取用户信息
+// 有code且代理作用域为access_token，获取access_token，拼接access_token和openid参数，直接跳转回请求源
+}else if($proxyScope == 'access_token'){
+    $cacheDir = __DIR__ . '/Cache';
+    $res = json_decode(file_get_contents($cacheDir . '/access_token_' . $appId . '.json'));
+    // access_token缓存文件不存在或者access_token已过期，则重新获取
+    if(!$res || $res['expire_time'] >= time()){
+        $paramsArr = array(
+            'appid'=>$appId,
+            'secret'=>$appSecret,
+            'code'=>$code,
+            'grant_type'=>'authorization_code'
+        );
+        $res = WechatOauth::getAccessToken($paramsArr);
+
+        if(!isset($res['errcode']) || empty($res['errcode'])){
+            // 缓存目录若不存在，创建目录
+            is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
+            // 新增过期时间时间戳
+            $res['expire_time'] = time() + $res['expire_in'];
+            // 缓存access_token等数据
+            file_put_contents($cacheDir . '/access_token_' . $appId . '.json', json_encode($res));
+        }
+    }
+
+    // 校验access_token
+    $checkRes = WechatOauth::checkAccessToken(array(
+        'access_token'=>$res['access_token'],
+        'openid'=>$res['openid']
+    ));
+
+    // access_token校验有误，刷新access_token
+    if($checkRes['errcode'] != 0){
+        $res = WechatOauth::refreshAccessToken(array(
+            'appid'=>$appId,
+            'grant_type'=>'refresh_token',
+            'refresh_token'=>$res['refresh_token']
+        ));
+        if(!isset($res['errcode']) || empty($res['errcode'])){
+            // 缓存目录若不存在，创建目录
+            is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
+            // 新增过期时间时间戳
+            $res['expire_time'] = time() + $res['expire_in'];
+            // 缓存access_token等数据
+            file_put_contents($cacheDir . '/access_token_' . $appId . '.json', json_encode($res));
+        }
+    }
+
+    if(!isset($res['errcode']) || empty($res['errcode'])){
+        $redirectUri = $_COOKIE['redirect_uri'];
+        if(!empty($redirectUri)){
+            header('Location:' . $redirectUri . '&access_token=' . $res['access_token'] . '&openid=' . $res['openid']);
+        }else{
+            exit('授权登录失败，请退出重试');
+        }
+    }
 }
 
 
