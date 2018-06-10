@@ -8,8 +8,8 @@
 
 1. 将本项目部署到代理服务器，需要php环境，并重启web服务器。
 2. 使用一个新域名（如：oauth.xx.com）解析到服务器ip，此域名将作为微信授权登录的回调域名
-3. 请求地址（get/post）：http://oauth.xx.com/index.php 
-   请求参数：
+3. 请求地址（get/post）：http://oauth.xx.com/index.php <br/>
+   请求参数：<br/>
    | 参数 | 解释 | 默认值 | 备注 |
    | ------ | ------ | ----- | ----- |
    | app_id | 公众号id |      |  必填     |
