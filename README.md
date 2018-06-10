@@ -14,6 +14,7 @@
    | ------ | ------ | ----- | ----- |
    | app_id | 公众号id|   是   |       |
    | scope  | 微信登录授权作用域 |是|可选值："snsapi_base"或"snsapi_userinfo"|
+   | redirect_uri | 授权回调地址 | 是 | 一般为发起授权登录的请求地址，需要用urlencode处理 |
    | proxy_scope | 代理操作作用域，用于判断获取code还是access_token|否|可选值："code"或"access_token"，默认"code"|
    | app_secret | 公众号密钥 |否|若proxy_scope为access_token,则此参数也需要|
    | oauth_type | 授权类型，判断是微信公众号授权还是开放平台网页授权 |否| 可选值:1或2，默认1|
@@ -26,7 +27,7 @@
 
 1. 代理项目地址为"http://oauth.xx.com/index.php"
 2. 首先必须将公众号授权回调域名设置为"oauth.xx.com"
-3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE"
+3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"
 4. 正常情况下最终将跳转到"http://request.xx.com/index.php?code=CODE&state=STATE"
 5. 获取到code之后，后续获取access_token、获取用户信息即可
 
@@ -34,7 +35,7 @@
 
 1. 代理项目地址为"http://oauth.xx.com/index.php"
 2. 首先必须将公众号授权回调域名设置为"oauth.xx.com"
-3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy=access_token&app_secret=APPSECRET"
+3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"
 4. 正常情况下最终将跳转到"http://request.xx.com/index.php?access_token=ACCESS_TOKEN&openid=OPENID"
 5. 后续用access_token及openid获取用户信息即可
 

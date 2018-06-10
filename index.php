@@ -27,8 +27,8 @@ $scope = $_REQUEST['scope'];
 $scope = $scope ? $scope : 'snsnsapi_userinfo';
 
 $protocol = isHttps() ? 'https' : 'http';
-$requestUri = $proxyScope == 'access_token' ? '/'.http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret)) : '';
-$proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $requestUri;
+$queryString = $proxyScope == 'access_token' ? '?' . http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret)) : '';
+$proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . $queryString;
 $redirectUri = $_REQUEST['redirect_uri'];
 
 // code为空，进行重定向获取code
