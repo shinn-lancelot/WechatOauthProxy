@@ -23,7 +23,7 @@
 
 1. 代理项目地址为"http://oauth.xx.com/index.php"
 2. 首先必须将公众号授权回调域名设置为"oauth.xx.com"
-3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?appid=APPID&scope=SCOPE"
+3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE"
 4. 正常情况下最终将跳转到"http://request.xx.com/index.php?code=CODE&state=STATE"
 5. 获取到code之后，后续获取access_token、获取用户信息即可
 
