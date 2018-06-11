@@ -13,7 +13,7 @@ $state = $state ? $state : getNonceStr();
 if(!empty($code) && $proxyScope == 'code'){
     $redirectUri = $_COOKIE['redirect_uri'];
     if(!empty($redirectUri)){
-        header('Location:' . $redirectUri . '&code=' . $code . '&state=' . $state);
+        header('Location:' . $redirectUri . '?&code=' . $code . '&state=' . $state);
     }else{
         exit('授权登录失败，请退出重试');
     }
@@ -27,7 +27,7 @@ $scope = $_REQUEST['scope'];
 $scope = $scope ? $scope : 'snsnsapi_userinfo';
 
 $protocol = isHttps() ? 'https' : 'http';
-$queryString = $proxyScope == 'access_token' ? '?' . http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret)) : '';
+$queryString = $proxyScope == 'access_token' ? '?&' . http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret,'proxy_scope'=>$proxyScope)) : '';
 $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . $queryString;
 $redirectUri = $_REQUEST['redirect_uri'];
 
@@ -93,7 +93,7 @@ if(empty($code)){
     if(!isset($res['errcode']) || empty($res['errcode'])){
         $redirectUri = $_COOKIE['redirect_uri'];
         if(!empty($redirectUri)){
-            header('Location:' . $redirectUri . '&access_token=' . $res['access_token'] . '&openid=' . $res['openid']);
+            header('Location:' . $redirectUri . '?&access_token=' . $res['access_token'] . '&openid=' . $res['openid']);
         }else{
             exit('授权登录失败，请退出重试');
         }
