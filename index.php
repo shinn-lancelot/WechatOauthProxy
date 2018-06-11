@@ -47,8 +47,9 @@ if(empty($code)){
 }else if($proxyScope == 'access_token'){
     $cacheDir = __DIR__ . '/Cache';
     $res = json_decode(file_get_contents($cacheDir . '/access_token_' . $appId . '.json'), true);
-    // access_token缓存文件不存在或者access_token已过期，则重新获取
-    if(!$res || $res['expire_time'] >= time()){
+    $openid = $_SESSION['openid'];
+    // access_token缓存文件不存在或者access_token已过期或者openid已过期，则重新获取
+    if(!$res || $res['expire_time'] >= time() || empty($openid)){
         $paramsArr = array(
             'appid'=>$appId,
             'secret'=>$appSecret,
@@ -62,6 +63,9 @@ if(empty($code)){
             is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
             // 新增过期时间时间戳
             $res['expire_time'] = time() + $res['expire_in'];
+            // 处理openid
+            $openid = $res['openid'];
+            unset($res['openid']);
             // 缓存access_token等数据
             file_put_contents($cacheDir . '/access_token_' . $appId . '.json', json_encode($res));
         }
@@ -70,7 +74,7 @@ if(empty($code)){
     // 校验access_token
     $checkRes = WechatOauth::checkAccessToken(array(
         'access_token'=>$res['access_token'],
-        'openid'=>$res['openid']
+        'openid'=>$openid
     ));
 
     // access_token校验有误，刷新access_token
@@ -85,6 +89,9 @@ if(empty($code)){
             is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
             // 新增过期时间时间戳
             $res['expire_time'] = time() + $res['expire_in'];
+            // 处理openid
+            $openid = $res['openid'];
+            unset($res['openid']);
             // 缓存access_token等数据
             file_put_contents($cacheDir . '/access_token_' . $appId . '.json', json_encode($res));
         }
@@ -93,7 +100,7 @@ if(empty($code)){
     if(!isset($res['errcode']) || empty($res['errcode'])){
         $redirectUri = $_COOKIE['redirect_uri'];
         if(!empty($redirectUri)){
-            header('Location:' . $redirectUri . '?&access_token=' . $res['access_token'] . '&openid=' . $res['openid']);
+            header('Location:' . $redirectUri . '?&access_token=' . $res['access_token'] . '&openid=' . $openid);
         }else{
             exit('授权登录失败，请退出重试');
         }
