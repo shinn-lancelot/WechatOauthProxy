@@ -44,5 +44,5 @@
 
 * 本项目中的access_token与微信基础接口调用凭据的access_token无关，仅用于微信授权登录使用。
 * 若仅获取code，强烈建议将access_token返回数据单独缓存，方便多个项目请求获取。
-* 若获取access_token，则无需再对access_token返回数据单独缓存。
+* 若获取access_token，则无需再对access_token返回数据单独缓存，另外，若部署在Linux服务器，由于需要创建缓存目录及文件，所以项目需要修改权限。
 
