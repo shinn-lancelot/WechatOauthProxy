@@ -6,7 +6,7 @@
     $redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     $code = $_GET['code'];
     $access_token = $_GET['access_token'];
-    $openid = $_GET['access_token'];
+    $openid = $_GET['openid'];
 
     $resinfo = '暂无结果';
 
