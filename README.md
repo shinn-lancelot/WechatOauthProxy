@@ -45,3 +45,7 @@
 * 本项目中的access_token与微信基础接口调用凭据的access_token无关，仅用于微信授权登录使用。
 * 若仅获取code，请注意将access_token返回数据做缓存处理。
 * 若获取access_token，则无需再对access_token返回数据单独缓存。若部署在Linux服务器，由于需要创建缓存目录及文件，所以项目需要修改权限。另外，php环境需要开启session、cookie。还有，由于获取access_token需要传递app_secret参数，为减小app_secret泄露的风险，代理地址建议启用https。
+
+### 体验地址
+
+##### 使用的是微信公众测试号的授权登录接口，仅供测试学习，进入后请先识别二维码关注测试号。<br>url：http://test.hillpy.com/wxoauth/index.php
