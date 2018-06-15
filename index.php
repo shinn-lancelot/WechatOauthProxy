@@ -24,10 +24,10 @@ $appSecret = $_REQUEST['app_secret'];
 $oauthType = $_REQUEST['oauth_type'];
 $oauthType = $oauthType ? $oauthType : 1;   //授权类型，默认公众号授权 1:公众号授权 2:开放平台网页授权
 $scope = $_REQUEST['scope'];
-$scope = $scope ? $scope : 'snsnsapi_userinfo';
+$scope = $scope ? $scope : 'snsapi_userinfo';
 
 $protocol = isHttps() ? 'https' : 'http';
-$queryString = $proxyScope == 'access_token' ? '?&' . http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret,'proxy_scope'=>$proxyScope)) : '';
+$queryString = $proxyScope == 'access_token' ? '?&' . http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret,'proxy_scope'=>$proxyScope)) : '';
 $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . $queryString;
 $redirectUri = $_REQUEST['redirect_uri'];
 
