@@ -50,7 +50,7 @@ if(empty($code)){
     $openid = $_SESSION['openid'];
     $res = json_decode(file_get_contents($cacheDir . '/access_token_openid_' . $openid . '.json'), true);
     // access_token缓存文件不存在或者access_token已过期或者openid已过期，则重新获取
-    if(!$res || $res['expire_time'] >= time() || empty($openid)){
+    if(!$res || $res['expire_time'] <= time() || empty($openid)){
         $paramsArr = array(
             'appid'=>$appId,
             'secret'=>$appSecret,
@@ -63,7 +63,7 @@ if(empty($code)){
             // 缓存目录若不存在，创建目录
             is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
             // 新增过期时间时间戳
-            $res['expire_time'] = time() + $res['expire_in'];
+            $res['expire_time'] = time() + $res['expires_in'];
             // 处理openid
             $openid = $res['openid'];
             $_SESSION['openid'] = $res['openid'];
@@ -90,7 +90,7 @@ if(empty($code)){
             // 缓存目录若不存在，创建目录
             is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
             // 新增过期时间时间戳
-            $res['expire_time'] = time() + $res['expire_in'];
+            $res['expire_time'] = time() + $res['expires_in'];
             // 处理openid
             $openid = $res['openid'];
             $_SESSION['openid'] = $res['openid'];
