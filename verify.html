@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>微信授权回调域名验证操作</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        input,button {
+            outline: none;
+        }
+
+        .wrapper {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .container {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 640px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #form {
+            margin: 0 2vw;
+        }
+
+        .field {
+            display: block;
+            width: 100%;
+            height: 6vh;
+            line-height: 6vh;
+            font-size: 2.5vh;
+            margin: 0 auto;
+            box-sizing: border-box;
+            text-align: center;
+            border: 0;
+            margin-top: 3vh;
+        }
+
+        #txt {
+            border-bottom: 1px solid #eee;
+        }
+        /*#txt:hover {*/
+            /*border-bottom: 1px solid #36a82e;*/
+        /*}*/
+        /*#txt:active {*/
+            /*border-bottom: 1px solid #36a82e;*/
+        /*}*/
+
+        #submit_btn {
+            user-select: none;
+            color: #fff;
+            background: #36a82e;
+            cursor: pointer;
+
+        }
+        /*#submit_btn:hover {*/
+            /*opacity: 0.8;*/
+        /*}*/
+        /*#submit_btn:active {*/
+            /*opacity: 1;*/
+        /*}*/
+
+        .disable {
+            background: #ddd !important;
+            cursor: not-allowed !important;
+        }
+
+        .line {
+            border-bottom: 1px solid #36a82e !important;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container">
+        <form id="form">
+            <input type="text" value="" class="field" name="txt" id="txt" placeholder="请填写微信授权回调域名验证文件内容">
+            <div type="submit" class="field disable" id="submit_btn">提交</div>
+        </form>
+    </div>
+</div>
+<script>
+    var submitBtnObj = document.getElementById('submit_btn'),
+        txtObj = document.getElementById('txt'),
+        xhr = '',
+        txt = '',
+        responseObj = '',
+        submitState = 1;
+
+    if (window.ActiveXObject) {
+        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+    } else if(window.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    }
+
+    var submitFunc = function(e) {
+        e.preventDefault();
+        if(submitState != 1){
+            return;
+        }
+        submitState = 0;
+        txt = txtObj.value;
+        if (txt == '') {
+            alert('请填写验证文件txt中的内容');
+            return;
+        }
+
+        xhr.open('post', '/verify.php', true);
+        xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        xhr.send('txt=' + txt);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                responseObj = JSON.parse(xhr.response);
+                alert(responseObj.message);
+                submitState = 1;
+            } else {
+                console.log(xhr.readyState);
+            }
+        }
+    }
+
+    txtObj.addEventListener('input', function(e) {
+        txt = txtObj.value;
+        var txtClass = submitBtnObj.getAttribute('class');
+        if (txt.length > 0) {
+            if (txtClass == 'field disable') {
+                submitBtnObj.setAttribute('class', 'field');
+            }
+            submitBtnObj.addEventListener('click', submitFunc);
+        } else {
+            if (txtClass == 'field') {
+                submitBtnObj.setAttribute('class', 'field disable');
+            }
+            submitBtnObj.removeEventListener('click', submitFunc);
+        }
+    });
+
+    txtObj.addEventListener('focusin', function(e) {
+        var txtClass = txtObj.getAttribute('class');
+        if (txtClass == 'field') {
+            txtObj.setAttribute('class', 'field line');
+        }
+    });
+
+    txtObj.addEventListener('focusout', function(e) {
+        var txtClass = txtObj.getAttribute('class');
+        if (txtClass == 'field line') {
+            txtObj.setAttribute('class', 'field');
+        }
+    });
+
+</script>
+</body>
+</html>
