@@ -50,4 +50,4 @@
 
 ### 体验地址
 
-##### 使用的是微信公众测试号的授权登录接口，仅供测试学习。进入后请先识别二维码关注测试号。<br>代理端url：http://oauth.hillpy.com/index.php<br>请求端url：http://test.hillpy.com/wxoauth/index.php
+##### 使用的是微信公众测试号的授权登录接口，仅供测试学习。进入后请先识别二维码关注测试号。<br>代理端url：http://wxoauth.hillpy.com/index.php<br>请求端url：http://test.hillpy.com/wxoauth/index.php
