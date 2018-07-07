@@ -2,7 +2,7 @@
 
 if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $res['code'] = -1001;
-    $res['message'] = '提交失败';
+    $res['message'] = '提交失败！';
 
     $filePrefix = 'MP_verify_';
     $callBackUrl = $_SERVER['HTTP_HOST'];
@@ -16,7 +16,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
 
     file_put_contents('./' . $filePrefix . $txt . '.txt' , $txt);
     $res['code'] = 1001;
-    $res['message'] = '提交成功';
+    $res['message'] = '提交成功！';
     $res['data'] = array(
         'callBackUrl'=>$callBackUrl
     );

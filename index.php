@@ -10,11 +10,11 @@ $state = $_REQUEST['state'];
 $state = $state ? $state : getNonceStr();
 
 // 有code且代理作用域为code，拼接code和state参数，直接跳转回请求源
-if(!empty($code) && $proxyScope == 'code'){
+if (!empty($code) && $proxyScope == 'code') {
     $redirectUri = $_COOKIE['redirect_uri'];
-    if(!empty($redirectUri)){
+    if (!empty($redirectUri)) {
         header('Location:' . $redirectUri . '?&code=' . $code . '&state=' . $state);
-    }else{
+    } else {
         exit('授权登录失败，请退出重试');
     }
 }
@@ -32,7 +32,7 @@ $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SE
 $redirectUri = $_REQUEST['redirect_uri'];
 
 // code为空，进行重定向获取code
-if(empty($code)){
+if (empty($code)) {
     setCookie('redirect_uri', $redirectUri, time () + 300);
     $paramsArr = array(
         'appid'=>$appId,
@@ -44,13 +44,13 @@ if(empty($code)){
     WechatOauth::toGetCode($paramsArr, $oauthType);
     
 // 有code且代理作用域为access_token，获取access_token，拼接access_token和openid参数，直接跳转回请求源
-}else if($proxyScope == 'access_token'){
+} else if ($proxyScope == 'access_token') {
     $cacheDir = __DIR__ . '/Cache/appid_' . $appId;
     session_start();
     $openid = $_SESSION['openid'];
     $res = json_decode(file_get_contents($cacheDir . '/access_token_openid_' . $openid . '.json'), true);
     // access_token缓存文件不存在或者access_token已过期或者openid已过期，则重新获取
-    if(!$res || $res['expire_time'] <= time() || empty($openid)){
+    if (!$res || $res['expire_time'] <= time() || empty($openid)) {
         $paramsArr = array(
             'appid'=>$appId,
             'secret'=>$appSecret,
@@ -59,7 +59,7 @@ if(empty($code)){
         );
         $res = WechatOauth::getAccessToken($paramsArr);
 
-        if(!isset($res['errcode']) || empty($res['errcode'])){
+        if (!isset($res['errcode']) || empty($res['errcode'])) {
             // 缓存目录若不存在，创建目录
             is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
             // 新增过期时间时间戳
@@ -80,13 +80,13 @@ if(empty($code)){
     ));
 
     // access_token校验有误，刷新access_token
-    if($checkRes['errcode'] != 0){
+    if ($checkRes['errcode'] != 0) {
         $res = WechatOauth::refreshAccessToken(array(
             'appid'=>$appId,
             'grant_type'=>'refresh_token',
             'refresh_token'=>$res['refresh_token']
         ));
-        if(!isset($res['errcode']) || empty($res['errcode'])){
+        if (!isset($res['errcode']) || empty($res['errcode'])) {
             // 缓存目录若不存在，创建目录
             is_dir($cacheDir) || mkdir($cacheDir, 0777, true);
             // 新增过期时间时间戳
@@ -100,11 +100,11 @@ if(empty($code)){
         }
     }
 
-    if(!isset($res['errcode']) || empty($res['errcode'])){
+    if (!isset($res['errcode']) || empty($res['errcode'])) {
         $redirectUri = $_COOKIE['redirect_uri'];
-        if(!empty($redirectUri)){
+        if (!empty($redirectUri)) {
             header('Location:' . $redirectUri . '?&access_token=' . $res['access_token'] . '&openid=' . $openid);
-        }else{
+        } else {
             exit('授权登录失败，请退出重试');
         }
     }
@@ -114,22 +114,24 @@ if(empty($code)){
 /**
  * 通用函数
  */
-function isHttps() {
-    if(!isset($_SERVER['HTTPS']))  return false;
-    if($_SERVER['HTTPS'] === 1){  //Apache
+function isHttps()
+{
+    if (!isset($_SERVER['HTTPS']))  return false;
+    if ($_SERVER['HTTPS'] === 1) {  //Apache
         return true;
-    }elseif($_SERVER['HTTPS'] === 'on'){ //IIS
+    } else if ($_SERVER['HTTPS'] === 'on') { //IIS
         return true;
-    }elseif($_SERVER['SERVER_PORT'] == 443){ //其他
+    } else if ($_SERVER['SERVER_PORT'] == 443) { //其他
         return true;
     }
     return false;
 }
 
-function getNonceStr($length = 32) {
+function getNonceStr($length = 32)
+{
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $str = '';
-    for( $i = 0; $i < $length; $i++ ){
+    for ( $i = 0; $i < $length; $i++ ) {
         $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
     }
     return $str;

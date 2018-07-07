@@ -4,17 +4,20 @@
     $scope = 'snsapi_userinfo';
     $proxy_scope = '';
     $redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-    $code = $_GET['code'];
-    $access_token = $_GET['access_token'];
-    $openid = $_GET['openid'];
+    $code = '';
+    isset($_GET['code']) && $code = $_GET['code'];
+    $access_token = '';
+    isset($_GET['access_token']) && $access_token = $_GET['access_token'];
+    $openid = '';
+    isset($_GET['openid']) && $openid = $_GET['openid'];
 
     $resinfo = '暂无结果';
 
-    if(!empty($code)){
-        $resinfo = '获取成功!<br>code = ' . $code;
+    if (!empty($code)) {
+        $resinfo = '获取成功!<br><br>code = ' . $code;
     }
 
-    if(!empty($access_token)){
+    if (!empty($access_token)) {
         $userinfo = json_decode(http_request('https://api.weixin.qq.com/sns/userinfo?access_token=' . $access_token . '&openid=' . $openid . '&lang=zh_CN'),true);
         $resinfo = '获取成功!<br><br>access_token = ' . $access_token . '<br><br>openid = ' . $openid;
         $resinfo .= '<br><br>nickname = ' . $userinfo['nickname'];
@@ -25,12 +28,13 @@
         $resinfo .= '<br><br>headimgurl = ' . $userinfo['headimgurl'];
     }
 
-    function http_request($url, $data = null){
+    function http_request($url, $data = null)
+    {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        if(!empty($data)){
+        if (!empty($data)) {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
@@ -48,6 +52,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>微信授权登录代理案例页</title>
+    <link rel="shortcut icon" href="./image/favicon.ico">
     <style>
         * {
             margin: 0;
@@ -167,10 +172,10 @@
         var codeBtn = document.getElementsByClassName('code-btn')[0],
             accessTokenBtn = document.getElementsByClassName('accesstoken-btn')[0];
 
-        codeBtn.addEventListener('click', function(){
+        codeBtn.addEventListener('click', function() {
             window.location.href = codeUrl;
         });
-        accessTokenBtn.addEventListener('click', function(){
+        accessTokenBtn.addEventListener('click', function() {
             window.location.href = accessTokenUrl;
         });
     </script>
