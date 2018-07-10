@@ -105,6 +105,7 @@
             width: 60%;
         }
         .qrcode-frame p{
+            font-size: 3.5vw;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -118,6 +119,7 @@
         .info-title {
             width: 100%;
             color: #36a82e;
+            font-size: 3.5vw;
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -163,11 +165,12 @@
             redirect_uri = "<?php echo $redirect_uri ?>",
             code = "<?php echo $code ?>",
             access_token = "<?php echo $access_token ?>",
-            openid = "<?php echo $openid ?>";
+            openid = "<?php echo $openid ?>",
+            proxy_domain = "wxoauth.hillpy.com";
 
-        var codeUrl = "http://wxoauth.hillpy.com/index.php?app_id=" + appid + "&scope=" + scope + "&proxy_scope=" + proxy_scope + "&redirect_uri=" + redirect_uri;
+        var codeUrl = "http://" + proxy_domain + "/index.php?app_id=" + appid + "&scope=" + scope + "&proxy_scope=" + proxy_scope + "&redirect_uri=" + redirect_uri;
             proxy_scope = "<?php $proxy_scope = 'access_token'; echo $proxy_scope ?>";
-        var accessTokenUrl = "http://wxoauth.hillpy.com/index.php?app_id=" + appid + "&scope=" + scope + "&proxy_scope=" + proxy_scope + "&app_secret=" + appsecret + "&redirect_uri=" + redirect_uri;
+        var accessTokenUrl = "http://" + proxy_domain + "/index.php?app_id=" + appid + "&scope=" + scope + "&proxy_scope=" + proxy_scope + "&app_secret=" + appsecret + "&redirect_uri=" + redirect_uri;
 
         var codeBtn = document.getElementsByClassName('code-btn')[0],
             accessTokenBtn = document.getElementsByClassName('accesstoken-btn')[0];
