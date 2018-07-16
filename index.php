@@ -47,7 +47,7 @@ if (empty($code)) {
 } else if ($proxyScope == 'access_token') {
     $cacheDir = __DIR__ . '/Cache/appid_' . $appId;
     session_start();
-    $openid = $_SESSION['openid'];
+    $openid = $_SESSION['openid_' . $appId];
     $res = json_decode(file_get_contents($cacheDir . '/access_token_openid_' . $openid . '.json'), true);
     // access_token缓存文件不存在或者access_token已过期或者openid已过期，则重新获取
     if (!$res || $res['expire_time'] <= time() || empty($openid)) {
@@ -66,7 +66,7 @@ if (empty($code)) {
             $res['expire_time'] = time() + $res['expires_in'];
             // 处理openid
             $openid = $res['openid'];
-            $_SESSION['openid'] = $res['openid'];
+            $_SESSION['openid_' . $appId] = $res['openid'];
             unset($res['openid']);
             // 缓存access_token等数据
             file_put_contents($cacheDir . '/access_token_openid_' . $openid . '.json', json_encode($res));
@@ -93,7 +93,7 @@ if (empty($code)) {
             $res['expire_time'] = time() + $res['expires_in'];
             // 处理openid
             $openid = $res['openid'];
-            $_SESSION['openid'] = $res['openid'];
+            $_SESSION['openid_' . $appId] = $res['openid'];
             unset($res['openid']);
             // 缓存access_token等数据
             file_put_contents($cacheDir . '/access_token_openid_' . $openid . '.json', json_encode($res));
