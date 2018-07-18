@@ -3,7 +3,7 @@
     $appsecret = '1429a684d8c8407c684c29f404d4c379';
     $scope = 'snsapi_userinfo';
     $proxy_scope = '';
-    $redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $redirect_uri = urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
     $code = '';
     isset($_GET['code']) && $code = $_GET['code'];
     $access_token = '';
