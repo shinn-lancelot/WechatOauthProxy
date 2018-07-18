@@ -3,7 +3,14 @@
     $appsecret = '1429a684d8c8407c684c29f404d4c379';
     $scope = 'snsapi_userinfo';
     $proxy_scope = '';
-    $redirect_uri = urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    $oldQuaryString = $_SERVER['QUERY_STRING'];
+    parse_str($oldQuaryString, $quaryStringArr);
+    $ignoreKey = array('code', 'state', 'access_token', 'openid');
+    foreach ($quaryStringArr as $key=>$value) {
+        if (in_array($key, $ignoreKey)) unset($quaryStringArr[$key]);
+    }
+    $newQuaryString = http_build_query($quaryStringArr);
+    $redirect_uri = urlencode('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?' . $newQuaryString);
     $code = '';
     isset($_GET['code']) && $code = $_GET['code'];
     $access_token = '';
