@@ -19,7 +19,7 @@
    | redirect_uri | 授权回调地址 | 是 | 一般为发起授权登录的请求地址，需要用urlencode处理 |
    | proxy_scope | 代理操作作用域，用于判断获取code还是access_token|否|可选值："code"或"access_token"，默认"code"|
    | app_secret | 公众号密钥 | 否 | 若proxy_scope为access_token,则此参数也需要|
-   | oauth_type | 授权类型，判断是微信公众号授权还是开放平台网页授权 |否| 可选值:1或2，默认1|
+   | oauth_type | 授权类型，1：公众平台，2：开放平台 |否| 可选值:1或2，默认1|
    | state | 重定向参数 | 否 |   |
 6. 根据请求地址及参数访问（使用header()函数）即可。若proxy_scope参数为"code"，则返回的地址将会带有code和state参数。若proxy_scope参数为"access_token"，则返回的地址将会带有access_token和openid参数。
 
@@ -29,15 +29,15 @@
 
 1. 代理项目地址为 "http://oauth.xx.com/index.php"。
 2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"。
-3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"。
+3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"。
 4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?code=CODE&state=STATE"。
-5. 获取到code后，后续根据微信授权登录接口获取access_token、获取用户信息即可。
+5. 获取到code后，再通过微信授权登录接口获取access_token、获取用户信息即可。
 
 * 获取access_token
 
 1. 代理项目地址为 "http://oauth.xx.com/index.php"。
 2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"
-3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy_scope=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"。
+3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy_scope=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"。
 4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?access_token=ACCESS_TOKEN&openid=OPENID"。
 5. 后续根据微信授权登录接口用access_token及openid获取用户信息即可。
 
