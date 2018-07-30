@@ -8,9 +8,9 @@
 
 1. 本项目仅支持php环境，其他后端语言不支持。将本项目部署到服务器上（demo目录内为应用请求端向代理端发起请求的例子，可删除）。
 2. 需要使用一个新域名（如：oauth.xx.com）解析到服务器公网ip上，此域名将作为微信授权登录的回调域名，修改web服务器配置：将新域名应用目录指定到该项目根目录，并重启web服务器。
-3. 访问http://oauth.xx.com/verify.html。进入页面后，在输入框填写授权登录回调域名的验证文件（txt格式）的内容，然后点击“提交”按钮。成功提交后，点击页面中的“复制微信授权回调域名”按钮复制回调域名（oauth.xx.com）。
+3. 访问 http://oauth.xx.com/verify.html 进入页面后，在输入框填写授权登录回调域名的验证文件（txt格式）的内容，然后点击“提交”按钮。成功提交后，点击页面中的“复制微信授权回调域名”按钮复制回调域名（oauth.xx.com）。
 4. 复制成功后，进入微信平台，在微信授权回调域名处填写复制的回调域名（oauth.xx.com）即可。
-4. 此时代理地址（get）：http://oauth.xx.com/index.php 。<br/>
+5. 此时代理地址（get）：http://oauth.xx.com/index.php 。<br/>
    请求参数：<br/>
    | 参数 | 解释 | 是否必须 | 备注 |
    | ------ | ------ | ----- | ----- |
@@ -19,26 +19,26 @@
    | redirect_uri | 授权回调地址 | 是 | 一般为发起授权登录的请求地址，需要用urlencode处理 |
    | proxy_scope | 代理操作作用域，用于判断获取code还是access_token|否|可选值："code"或"access_token"，默认"code"|
    | app_secret | 公众号密钥 | 否 | 若proxy_scope为access_token,则此参数也需要|
-   | oauth_type | 授权类型，判断是微信公众号授权还是开放平台网页授权 |否| 可选值:1或2，默认1|
+   | oauth_type | 授权类型，判断是微信公众号授权还是开放平台网页授权 |否| 可选值:1或2，默认1|
    | state | 重定向参数 | 否 |   |
-5. 根据请求地址及参数访问（使用header()函数）即可。若proxy_scope参数为"code"，则返回的地址将会带有code和state参数。若proxy_scope参数为"access_token"，则返回的地址将会带有access_token和openid参数。
+6. 根据请求地址及参数访问（使用header()函数）即可。若proxy_scope参数为"code"，则返回的地址将会带有code和state参数。若proxy_scope参数为"access_token"，则返回的地址将会带有access_token和openid参数。
 
 ### 举例说明
 
 * 获取code
 
-1. 代理项目地址为"http://oauth.xx.com/index.php"。
-2. 首先必须将公众号授权回调域名设置为"oauth.xx.com"。
-3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"。
-4. 正常情况下最终将跳转到"http://request.xx.com/index.php?code=CODE&state=STATE"。
+1. 代理项目地址为 "http://oauth.xx.com/index.php"。
+2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"。
+3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"。
+4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?code=CODE&state=STATE"。
 5. 获取到code后，后续根据微信授权登录接口获取access_token、获取用户信息即可。
 
 * 获取access_token
 
-1. 代理项目地址为"http://oauth.xx.com/index.php"。
-2. 首先必须将公众号授权回调域名设置为"oauth.xx.com"
-3. 在"http://request.xx.com/index.php"页面内请求代理地址："http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy_scope=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"。
-4. 正常情况下最终将跳转到"http://request.xx.com/index.php?access_token=ACCESS_TOKEN&openid=OPENID"。
+1. 代理项目地址为 "http://oauth.xx.com/index.php"。
+2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"
+3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy_scope=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"。
+4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?access_token=ACCESS_TOKEN&openid=OPENID"。
 5. 后续根据微信授权登录接口用access_token及openid获取用户信息即可。
 
 
