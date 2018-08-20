@@ -1,5 +1,10 @@
 # 微信授权登录代理转发
 
+[![issue](https://img.shields.io/github/issues/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy/issues)
+[![star](https://img.shields.io/github/stars/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy)
+[![fork](https://img.shields.io/github/forks/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy)
+[![license](https://img.shields.io/github/license/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy/blob/master/LICENSE)
+
 ### 功能描述
 
 ##### 请求源用get方式请求代理微信授权登录地址，代理服务器获取参数后向微信服务器发起请求，从而获取code或获取access_token及openid，最后代理服务器将转发回请求源。避免了微信公众号授权登录接口只能同时由同一域名发起的限制。
@@ -51,4 +56,5 @@
 
 ### 体验地址
 
-##### 使用的是微信公众测试号的授权登录接口，仅供测试学习。进入后请先识别二维码关注测试号。<br>代理端url：http://wxoauth.hillpy.com/index.php<br>请求端url：http://test.hillpy.com/wxoauth/index.php
+##### 使用的是微信公众测试号的授权登录接口，仅供测试学习。进入后请先识别二维码关注测试号。<br>代理端url：http://wxoauth.hillpy.com/index.php<br>请求端url：http://test.hillpy.com/wxoauth/index.php<br>
+![test](http://qr.liantu.com/api.php?text=http://test.hillpy.com/wxoauth/index.php&w=300)
