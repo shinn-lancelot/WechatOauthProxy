@@ -25,8 +25,13 @@
                 font-size: 4vw;
             }
             .user-size, .logout-size {
+                height: 4vw;
                 line-height: 4vw;
                 font-size: 3vw;
+                margin-left: 2vw;
+                display: inline-block;
+                vertical-align: top;
+                overflow: hidden;
             }
             .logo {
                 margin: 0 auto 10vw;
@@ -44,8 +49,13 @@
                 font-size: calc(640px * 0.04);
             }
             .user-size, .logout-size {
+                height: calc(640px * 0.04);
                 line-height: calc(640px * 0.04);
                 font-size: calc(640px * 0.03);
+                margin-left: 2vw;
+                display: inline-block;
+                vertical-align: top;
+                overflow: hidden;
             }
             .logo {
                 margin: 0 auto calc(640px * 0.1);
@@ -78,19 +88,14 @@
             top: 2vw;
             left: 0;
             z-index: 100;
+            font-size: 0;
         }
 
         .user {
-            margin-left: 1vw;
-            display: inline-block;
-            overflow: hidden;
             color: #36a82e;
         }
 
         .logout-btn {
-            margin-left: 1vw;
-            display: inline-block;
-            overflow: hidden;
             color: #ddd;
             text-decoration: underline;
             cursor: pointer;

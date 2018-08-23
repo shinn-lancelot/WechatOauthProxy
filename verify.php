@@ -40,11 +40,29 @@
                 right: 2.5vw;
                 cursor: pointer;
             }
+            .user-size, .logout-size {
+                height: 4vw;
+                line-height: 4vw;
+                font-size: 3vw;
+                margin-left: 2vw;
+                display: inline-block;
+                vertical-align: top;
+                overflow: hidden;
+            }
             .logo {
                 margin: 0 auto 10vw;
                 width: 30vw;
                 height: 30vw;
                 background: url("./asset/image/oauth_proxy.png") no-repeat center / contain;
+            }
+            .home {
+                width: 4vw;
+                height: 4vw;
+                background: url("./asset/image/home.png") no-repeat center / contain;
+                float: left;
+                display: inline-block;
+                vertical-align: top;
+                cursor: pointer;
             }
         }
 
@@ -71,11 +89,29 @@
                 right: calc(640px * 0.025);
                 cursor: pointer;
             }
+            .user-size, .logout-size {
+                height: calc(640px * 0.04);
+                line-height: calc(640px * 0.04);
+                font-size: calc(640px * 0.03);
+                margin-left: 2vw;
+                display: inline-block;
+                vertical-align: top;
+                overflow: hidden;
+            }
             .logo {
                 margin: 0 auto calc(640px * 0.1);
                 width: calc(640px * 0.3);
                 height: calc(640px * 0.3);
                 background: url("./asset/image/oauth_proxy.png") no-repeat center / contain;
+            }
+            .home {
+                width: calc(640px * 0.04);
+                height: calc(640px * 0.04);
+                background: url("./asset/image/home.png") no-repeat center / contain;
+                float: left;
+                display: inline-block;
+                vertical-align: top;
+                cursor: pointer;
             }
         }
 
@@ -91,6 +127,28 @@
             height: 100vh;
             overflow: hidden;
             position: relative;
+        }
+
+        .user-box {
+            width: 100%;
+            padding: 0 2vw;
+            box-sizing: border-box;
+            text-align: right;
+            position: absolute;
+            top: 2vw;
+            left: 0;
+            z-index: 100;
+            font-size: 0;
+        }
+
+        .user {
+            color: #36a82e;
+        }
+
+        .logout-btn {
+            color: #ddd;
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         .box {
@@ -170,6 +228,11 @@
 <body>
 <div class="wrapper">
     <div class="container">
+        <div class="user-box">
+            <a href="./admin.php"><div class="home"></div></a>
+            <p class="user user-size"><?php echo $user; ?></p>
+            <p class="logout-btn logout-size">退出登录</p>
+        </div>
         <div class="box">
             <div class="logo"></div>
             <form id="form">
@@ -200,7 +263,9 @@
         txtClass = '',
         clearIconObj = document.getElementsByClassName('icon-clear')[0],
         redirectUrl = window.location.host,
-        formObj = document.getElementById('form');
+        formObj = document.getElementById('form'),
+        loginoutBtnObj = document.getElementsByClassName('logout-btn')[0],
+        logoutState = 1;
 
     if (window.ActiveXObject) {
         xhr = new ActiveXObject("Microsoft.XMLHTTP");
@@ -236,6 +301,34 @@
         }
     }
 
+    var logout = function(e) {
+        e.preventDefault();
+        if (logoutState != 1) {
+            return;
+        }
+        logoutState = 0;
+
+        xhr.open('post', './common/logoutHandle.php', true);
+        xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+        xhr.send('');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                responseObj = JSON.parse(xhr.response);
+                alert(responseObj.message);
+                if (responseObj.code == 1) {
+                    setTimeout(function() {
+                        window.location.href = './login.php';
+                    }, 500);
+                } else {
+                    logoutState = 1;
+                }
+
+            } else {
+                console.log(xhr.readyState);
+            }
+        }
+    }
+
     var clearFunc = function (e) {
         txtObj.value = '';
         txt = '';
@@ -246,6 +339,10 @@
         clearIconObj.style.display = 'none';
         submitBtnObj.removeEventListener('click', submitFunc);
     }
+
+    loginoutBtnObj.addEventListener('click', function(e) {
+        confirm('您确定要退出吗？') && logout(e);
+    });
 
     txtObj.addEventListener('input', function (e) {
         submitBtnObj.removeEventListener('click', submitFunc);
