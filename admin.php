@@ -25,7 +25,7 @@
                 font-size: 4vw;
             }
             .user-size, .logout-size {
-                line-height: 3vw;
+                line-height: 4vw;
                 font-size: 3vw;
             }
             .logo {
@@ -44,7 +44,7 @@
                 font-size: calc(640px * 0.04);
             }
             .user-size, .logout-size {
-                line-height: calc(640px * 0.03);
+                line-height: calc(640px * 0.04);
                 font-size: calc(640px * 0.03);
             }
             .logo {
