@@ -1,9 +1,9 @@
 <?php
+
     session_start();
     $user = $_SESSION['wop_admin_user'];
-    if (empty($user)) {
-        header('Location: ./login.html');
-    }
+    empty($user) && header('Location: ./login.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -157,7 +157,7 @@
         <div class="box">
             <div class="box-content">
                 <div class="logo"></div>
-                <a href="./verify.html">
+                <a href="./verify.php">
                     <div class="btn btn-size">
                         <p>添加微信公众号授权登录txt验证内容</p>
                     </div>
@@ -195,7 +195,7 @@
         }
         logoutState = 0;
 
-        xhr.open('post', './common/logout.php', true);
+        xhr.open('post', './common/logoutHandle.php', true);
         xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
         xhr.send('');
         xhr.onreadystatechange = function() {
@@ -204,7 +204,7 @@
                 alert(responseObj.message);
                 if (responseObj.code == 1) {
                     setTimeout(function() {
-                        window.location.href = './login.html';
+                        window.location.href = './login.php';
                     }, 500);
                 } else {
                     logoutState = 1;

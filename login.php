@@ -1,3 +1,11 @@
+<?php
+
+    session_start();
+    $user = $_SESSION['wop_admin_user'];
+    empty(!$user) && header('Location: ./admin.php');
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -253,7 +261,7 @@
             return;
         }
 
-        xhr.open('post', './common/login.php', true);
+        xhr.open('post', './common/loginHandle.php', true);
         xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
         xhr.send('user=' + user + '&password=' + password);
         xhr.onreadystatechange = function() {
