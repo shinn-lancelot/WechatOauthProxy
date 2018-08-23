@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>微信授权回调域名验证操作</title>
     <link rel="shortcut icon" href="./asset/image/favicon.ico">
@@ -188,6 +188,8 @@
         txt = '',
         responseObj = '',
         submitState = 1,
+        submitBtnClass = '',
+        txtClass = '',
         clearIconObj = document.getElementsByClassName('icon-clear')[0],
         redirectUrl = window.location.host,
         formObj = document.getElementById('form');
@@ -228,8 +230,9 @@
 
     var clearFunc = function (e) {
         txtObj.value = '';
-        var txtClass = submitBtnObj.getAttribute('class');
-        if (txtClass == 'field') {
+        txt = '';
+        submitBtnClass = submitBtnObj.getAttribute('class');
+        if (submitBtnClass == 'field') {
             submitBtnObj.setAttribute('class', 'field disable');
         }
         clearIconObj.style.display = 'none';
@@ -239,15 +242,15 @@
     txtObj.addEventListener('input', function (e) {
         submitBtnObj.removeEventListener('click', submitFunc);
         txt = txtObj.value;
-        var txtClass = submitBtnObj.getAttribute('class');
+        submitBtnClass = submitBtnObj.getAttribute('class');
         if (txt.length > 0) {
-            if (txtClass == 'field disable') {
+            if (submitBtnClass == 'field disable') {
                 submitBtnObj.setAttribute('class', 'field');
             }
             clearIconObj.style.display = 'block';
             submitBtnObj.addEventListener('click', submitFunc);
         } else {
-            if (txtClass == 'field') {
+            if (submitBtnClass == 'field') {
                 submitBtnObj.setAttribute('class', 'field disable');
             }
             clearIconObj.style.display = 'none';
@@ -256,14 +259,14 @@
     });
 
     txtObj.addEventListener('focusin', function (e) {
-        var txtClass = txtObj.getAttribute('class');
+        txtClass = txtObj.getAttribute('class');
         if (txtClass == 'field') {
             txtObj.setAttribute('class', 'field line');
         }
     });
 
     txtObj.addEventListener('focusout', function (e) {
-        var txtClass = txtObj.getAttribute('class');
+        txtClass = txtObj.getAttribute('class');
         if (txtClass == 'field line') {
             txtObj.setAttribute('class', 'field');
         }
