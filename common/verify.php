@@ -1,7 +1,7 @@
 <?php
 
 if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
-    $res['code'] = -1001;
+    $res['code'] = 0;
     $res['message'] = '提交失败！';
 
     $filePrefix = 'MP_verify_';
@@ -14,8 +14,8 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
         exit();
     }
 
-    file_put_contents('./' . $filePrefix . $txt . '.txt' , $txt);
-    $res['code'] = 1001;
+    file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/' . $filePrefix . $txt . '.txt' , $txt);
+    $res['code'] = 1;
     $res['message'] = '提交成功！';
     $res['data'] = array(
         'callBackUrl'=>$callBackUrl

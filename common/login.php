@@ -19,16 +19,14 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
 
     // 密码盐
     $salt = md5('shinn_lancelot');
-    $res = json_decode(file_get_contents(__DIR__ . '/user.json'), true);
+    $res = json_decode(file_get_contents('./user.json'), true);
     $hasUser = false;
     foreach ($res as $key=>$value) {
         if ($value['user'] == $user) {
             $hasUser = true;
             if ($value['password'] == md5($password . $salt)) {
-                // 生成用户登录令牌
-                $token = getNonceStr();
                 session_start();
-                $_SESSION['token'] = $token;
+                $_SESSION['wop_admin_user'] = $user;
 
                 $res['code'] = 1;
                 $res['message'] = '登录成功！';
@@ -43,28 +41,4 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     }
 
     echo json_encode($res);
-}
-
-/**
- * 获取随机字符串
- * @param int $length
- * @return string
- */
-function getNonceStr($length = 16)
-{
-    $str2 = time();
-    $length2 = strlen($str2);
-    $length1 = $length - $length2;
-    if($length1 <= 0){
-        $length1 = 6;
-    }
-
-    $chars = "abcdefghijklmnopqrstuvwxyz";
-    $str1 = "";
-    for ( $i = 0; $i < $length1; $i++ )  {
-        $str1 .= substr($chars, mt_rand(0, strlen($chars)-1), 1);
-    }
-    $str = $str1.$str2;
-
-    return $str;
 }
