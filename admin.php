@@ -1,7 +1,7 @@
 <?php
 
     session_start();
-    $user = $_SESSION['wop_admin_user'];
+    $user = isset($_SESSION['wop_admin_user']) ? $_SESSION['wop_admin_user'] : '';
     empty($user) && header('Location: ./login.php');
 
 ?>

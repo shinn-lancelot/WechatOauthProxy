@@ -11,7 +11,7 @@ $state = $state ? $state : getNonceStr();
 
 // 有code且代理作用域为code，拼接code和state参数，直接跳转回请求源
 if (!empty($code) && $proxyScope == 'code') {
-    $redirectUri = $_COOKIE['redirect_uri'];
+    $redirectUri = isset($_COOKIE['redirect_uri']) ? $_COOKIE['redirect_uri'] : '';
     if (!empty($redirectUri)) {
         $mark = strpos($redirectUri, '?') === false ? '?' : '';
         header('Location:' . $redirectUri . $mark . '&code=' . $code . '&state=' . $state);
@@ -50,7 +50,7 @@ if (empty($code)) {
 } else if ($proxyScope == 'access_token') {
     $cacheDir = __DIR__ . '/Cache/appid_' . $appId;
     session_start();
-    $openid = $_SESSION['openid_' . $appId];
+    $openid = isset($_SESSION['openid_' . $appId]) ? $_SESSION['openid_' . $appId] : '';
     $res = json_decode(file_get_contents($cacheDir . '/access_token_openid_' . $openid . '.json'), true);
     // access_token缓存文件不存在或者access_token已过期或者openid已过期，则重新获取
     if (!$res || $res['expire_time'] <= time() || empty($openid)) {
@@ -104,7 +104,7 @@ if (empty($code)) {
     }
 
     if (!isset($res['errcode']) || empty($res['errcode'])) {
-        $redirectUri = $_COOKIE['redirect_uri'];
+        $redirectUri = isset($_COOKIE['redirect_uri']) ? $_COOKIE['redirect_uri'] : '';
         if (!empty($redirectUri)) {
             $mark = strpos($redirectUri, '?') === false ? '?' : '';
             header('Location:' . $redirectUri . $mark . '&access_token=' . $res['access_token'] . '&openid=' . $openid);

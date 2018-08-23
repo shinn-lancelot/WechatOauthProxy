@@ -5,8 +5,8 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $res['message'] = '退出失败！';
 
     session_start();
-    $token = $_SESSION['wop_admin_user'];
-    if (!$token) {
+    $user = isset($_SESSION['wop_admin_user']) ? $_SESSION['wop_admin_user'] : '';
+    if (!$user) {
         echo json_encode($res);
         exit();
     }
