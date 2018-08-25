@@ -13,7 +13,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>添加微信公众号授权登录域名验证文件内容</title>
+    <title>添加接口调用安全域名</title>
     <link rel="shortcut icon" href="./asset/image/favicon.ico">
     <link rel="stylesheet" href="./asset/css/reset.css">
     <style>
@@ -166,12 +166,12 @@
             margin: 0 2vw;
         }
 
-        #txt {
+        #domain_name {
             background: transparent;
             border-bottom: 1px solid #eee;
         }
 
-        #submit_btn, #copy, .manage-verify {
+        #submit_btn, .manage-domain-name {
             color: #fff;
             background: #36a82e;
             cursor: pointer;
@@ -183,7 +183,7 @@
             user-select: none;
         }
 
-        #submit_btn p, #copy p {
+        #submit_btn p, .manage-domain-name p {
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
@@ -225,37 +225,32 @@
             <div class="logo"></div>
             <form id="form">
                 <div class="input-box">
-                    <input type="text" class="field" name="txt" id="txt" value="" autocomplete="off" placeholder="请填写微信授权回调域名验证文件内容">
+                    <input type="text" class="field" name="domain_name" id="domain_name" value="" placeholder="请填写接口调用安全域名">
                     <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="field disable" id="submit_btn">
                     <p>提交</p>
                 </div>
-                <a href="./manageVerify.php">
-                    <div class="field manage-verify">
-                        <p>管理微信授权回调域名验证文件</p>
+                <a href="./manageDomainName.php">
+                    <div class="field manage-domain-name">
+                        <p>管理接口调用安全域名</p>
                     </div>
                 </a>
-                <div class="field" id="copy">
-                    <p>复制微信授权回调域名</p>
-                </div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="./asset/js/clipboard.min.js"></script>
 <script>
     var submitBtnObj = document.getElementById('submit_btn'),
-        txtObj = document.getElementById('txt'),
+        domainNameObj = document.getElementById('domain_name'),
         xhr = '',
-        txt = '',
+        domainName = '',
         responseObj = '',
         submitState = 1,
         submitBtnClass = '',
-        txtClass = '',
+        domainNameClass = '',
         clearIconObj = document.getElementsByClassName('icon-clear')[0],
-        redirectUrl = window.location.host,
         formObj = document.getElementById('form'),
         loginoutBtnObj = document.getElementsByClassName('logout-btn')[0],
         logoutState = 1;
@@ -273,15 +268,15 @@
         }
         submitState = 0;
 
-        txt = txtObj.value;
-        if (txt == '') {
-            alert('请填写验证文件txt中的内容！');
+        domainName = domainNameObj.value;
+        if (domainName == '') {
+            alert('请填写接口调用安全域名！');
             return;
         }
 
-        xhr.open('post', './common/verifyHandle.php', true);
+        xhr.open('post', './common/addSafeDomainName.php', true);
         xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhr.send('txt=' + txt);
+        xhr.send('domain_name=' + domainName);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 responseObj = JSON.parse(xhr.response);
@@ -327,8 +322,8 @@
     }
 
     var clearFunc = function (e) {
-        txtObj.value = '';
-        txt = '';
+        domainNameObj.value = '';
+        domainName = '';
         submitBtnClass = submitBtnObj.getAttribute('class');
         if (submitBtnClass == 'field') {
             submitBtnObj.setAttribute('class', 'field disable');
@@ -341,11 +336,11 @@
         confirm('您确定要退出吗？') && logout(e);
     });
 
-    txtObj.addEventListener('input', function (e) {
+    domainNameObj.addEventListener('input', function (e) {
         submitBtnObj.removeEventListener('click', submitFunc);
-        txt = txtObj.value;
+        domainName = domainNameObj.value;
         submitBtnClass = submitBtnObj.getAttribute('class');
-        if (txt.length > 0) {
+        if (domainName.length > 0) {
             if (submitBtnClass == 'field disable') {
                 submitBtnObj.setAttribute('class', 'field');
             }
@@ -360,46 +355,31 @@
         }
     });
 
-    txtObj.addEventListener('focusin', function (e) {
-        txtClass = txtObj.getAttribute('class');
-        if (txtClass == 'field') {
-            txtObj.setAttribute('class', 'field line');
+    domainNameObj.addEventListener('focusin', function (e) {
+        domainNameClass = domainNameObj.getAttribute('class');
+        if (domainNameClass == 'field') {
+            domainNameObj.setAttribute('class', 'field line');
         }
     });
 
-    txtObj.addEventListener('focusout', function (e) {
-        txtClass = txtObj.getAttribute('class');
-        if (txtClass == 'field line') {
-            txtObj.setAttribute('class', 'field');
+    domainNameObj.addEventListener('focusout', function (e) {
+        domainNameClass = domainNameObj.getAttribute('class');
+        if (domainNameClass == 'field line') {
+            domainNameObj.setAttribute('class', 'field');
         }
     });
-    
+
     clearIconObj.addEventListener('click', clearFunc);
 
     formObj.addEventListener('keydown', function (e) {
-        txt = txtObj.value;
+        domainName = domainNameObj.value;
         if (e.keyCode == 13) {
-            if (txt.length > 0) {
+            if (domainName.length > 0) {
                 submitFunc(e);
             } else {
                 e.preventDefault();
             }
         }
-    });
-
-    var copy = new ClipboardJS('#copy', {
-        text: function() {
-            return redirectUrl;
-        }
-    });
-    copy.on("success",function(e){
-        alert('复制成功！');
-        console.log(e.text);
-        e.clearSelection();
-    });
-    copy.on("error",function(e){
-        alert('复制失败！');
-        console.log(e.action);
     });
 </script>
 </body>

@@ -164,12 +164,12 @@
                 <div class="logo"></div>
                 <a href="./verify.php">
                     <div class="btn btn-size">
-                        <p>添加微信公众号授权登录txt验证内容</p>
+                        <p>添加微信公众号授权登录域名验证文件内容</p>
                     </div>
                 </a>
-                <a href="">
+                <a href="./safeDomainName.php">
                     <div class="btn btn-size">
-                        <p>添加接口允许域名</p>
+                        <p>添加接口调用安全域名</p>
                     </div>
                 </a>
                 <a href="">
@@ -214,7 +214,6 @@
                 } else {
                     logoutState = 1;
                 }
-
             } else {
                 console.log(xhr.readyState);
             }

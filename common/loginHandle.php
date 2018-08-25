@@ -19,21 +19,29 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
 
     // 密码盐
     $salt = md5('shinn_lancelot');
-    $res = json_decode(file_get_contents('./user.json'), true);
-    $hasUser = false;
-    foreach ($res as $key=>$value) {
-        if ($value['user'] == $user) {
-            $hasUser = true;
-            if ($value['password'] == md5($password . $salt)) {
-                session_start();
-                $_SESSION['wop_admin_user'] = $user;
 
-                $res['code'] = 1;
-                $res['message'] = '登录成功！';
-            } else {
-                $res['message'] = '密码错误！';
+    $userArr = array();
+    $file = './user.json';
+    if (file_exists($file)) {
+        $userArr = json_decode(file_get_contents('./user.json'), true);
+    }
+
+    $hasUser = false;
+    if (count($userArr) > 0) {
+        foreach ($userArr as $key=>$value) {
+            if ($value['user'] == $user) {
+                $hasUser = true;
+                if ($value['password'] == md5($password . $salt)) {
+                    session_start();
+                    $_SESSION['wop_admin_user'] = $user;
+
+                    $res['code'] = 1;
+                    $res['message'] = '登录成功！';
+                } else {
+                    $res['message'] = '密码错误！';
+                }
+                break;
             }
-            break;
         }
     }
     if (!$hasUser) {

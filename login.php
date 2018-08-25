@@ -206,12 +206,12 @@
                 <div class="input-box">
                     <i class="icon icon-user"></i>
                     <input type="text" class="field" name="user" id="user" value="" placeholder="用户名">
-                    <i class="icon icon-clear"></i>
+                    <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="input-box">
                     <i class="icon icon-password"></i>
                     <input type="password" class="field" name="password" id="password" value="" placeholder="密码">
-                    <i class="icon icon-clear"></i>
+                    <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="field disable" id="login_btn">
                     <p>登录</p>
@@ -275,7 +275,6 @@
                 } else {
                     loginState = 1;
                 }
-
             } else {
                 console.log(xhr.readyState);
             }
