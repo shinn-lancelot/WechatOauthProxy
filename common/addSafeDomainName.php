@@ -13,7 +13,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
         exit();
     }
 
-    $domainName = strip_tags(trim($_POST['domain_name']));
+    $domainName = isset($_POST['domain_name']) ? strip_tags(trim($_POST['domain_name'])) : '';
 
     if (empty($domainName)) {
         echo json_encode($res);
@@ -38,7 +38,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
 
     if (!$hasDomainName) {
         array_unshift($domainNameArr, $domainName);
-        file_put_contents('./domainName.json', json_encode($domainNameArr));
+        file_put_contents($file, json_encode($domainNameArr));
     }
 
     $res['code'] = 1;

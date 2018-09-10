@@ -375,7 +375,7 @@
 
     clearIconObj.addEventListener('click', clearFunc);
 
-    formObj.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {
         domainName = domainNameObj.value;
         if (e.keyCode == 13) {
             if (domainName.length > 0) {

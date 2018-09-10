@@ -13,7 +13,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
         exit();
     }
 
-    $verify = strip_tags(trim($_POST['verify']));
+    $verify = isset($_POST['verify']) ? strip_tags(trim($_POST['verify'])) : '';
 
     if (empty($verify)) {
         echo json_encode($res);

@@ -253,11 +253,13 @@
         user = userObj.value;
         if (user == '') {
             alert('请输入用户名！');
+            loginState = 1;
             return;
         }
         password = passwordObj.value;
         if (password == '') {
             alert('请输入密码！');
+            loginState = 1;
             return;
         }
 
@@ -374,7 +376,7 @@
         clearIconObjs[i].addEventListener('click', clearFunc);
     }
 
-    formObj.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {
         user = userObj.value;
         password = passwordObj.value;
         if (e.keyCode == 13) {

@@ -4,8 +4,8 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $res['code'] = 0;
     $res['message'] = '登录失败！';
 
-    $user = strip_tags(trim($_POST['user']));
-    $password = $_POST['password'];
+    $user = isset($_POST['user']) ? strip_tags(trim($_POST['user'])) : '';
+    $password = isset($_POST['password']) ? strip_tags(trim($_POST['password'])) : '';
     if (empty($user)) {
         $res['message'] = '用户名不能为空！';
         echo json_encode($res);
@@ -23,7 +23,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $userArr = array();
     $file = './user.json';
     if (file_exists($file)) {
-        $userArr = json_decode(file_get_contents('./user.json'), true);
+        $userArr = json_decode(file_get_contents($file), true);
     }
 
     $hasUser = false;

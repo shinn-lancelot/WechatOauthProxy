@@ -380,7 +380,7 @@
     
     clearIconObj.addEventListener('click', clearFunc);
 
-    formObj.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {
         txt = txtObj.value;
         if (e.keyCode == 13) {
             if (txt.length > 0) {

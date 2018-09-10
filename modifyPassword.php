@@ -155,7 +155,7 @@ empty($user) && header('Location: ./login.php');
             margin: 0 2vw;
         }
 
-        #domain_name {
+        #old_password, #new_password, #again_new_password {
             background: transparent;
             border-bottom: 1px solid #eee;
         }
@@ -214,15 +214,15 @@ empty($user) && header('Location: ./login.php');
         <div class="box">
             <form id="form">
                 <div class="input-box">
-                    <input type="text" class="field" name="old_password" id="old_password" value="" autocomplete="off" placeholder="请填写旧密码">
+                    <input type="password" class="field" name="old_password" id="old_password" value="" autocomplete="off" placeholder="请填写旧密码">
                     <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" class="field" name="new_password" id="new_password" value="" autocomplete="off" placeholder="请填写新密码">
+                    <input type="password" class="field" name="new_password" id="new_password" value="" autocomplete="off" placeholder="请填写新密码">
                     <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" class="field" name="again_new_password" id="again_new_password" value="" autocomplete="off" placeholder="请再次填写新密码">
+                    <input type="password" class="field" name="again_new_password" id="again_new_password" value="" autocomplete="off" placeholder="请再次填写新密码">
                     <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="field disable" id="submit_btn">
@@ -242,6 +242,7 @@ empty($user) && header('Location: ./login.php');
         oldPassword = '',
         newPassword = '',
         againNewPassword = '',
+        user = document.getElementsByClassName('user')[0].innerHTML,
         responseObj = '',
         submitState = 1,
         submitBtnClass = '',
@@ -269,39 +270,41 @@ empty($user) && header('Location: ./login.php');
         oldPassword = oldPasswordObj.value;
         if (oldPassword == '') {
             alert('请填写旧密码！');
+            submitState = 1;
             return;
         }
         newPassword = newPasswordObj.value;
         if (newPassword == '') {
             alert('请填写新密码！');
+            submitState = 1;
             return;
         }
         againNewPassword = againNewPasswordObj.value;
         if (againNewPassword == '') {
             alert('请再次填写新密码！');
+            submitState = 1;
             return;
         }
         if (newPassword != againNewPassword) {
             alert('两次输入的新密码不一致！请重新填写！');
-            newPasswordObj.value = '';
-            againNewPasswordObj.value = '';
+            submitState = 1;
             return
         }
 
         xhr.open('post', './common/modifyPasswordHandle.php', true);
         xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhr.send('oldPassword=' + oldPassword + '&newPassword=' + newPassword + '&againNewPassword=' + againNewPassword);
+        xhr.send('user=' + user + '&old_password=' + oldPassword + '&new_password=' + newPassword + '&again_new_password=' + againNewPassword);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 responseObj = JSON.parse(xhr.response);
                 alert(responseObj.message);
-                // responseObj.code == 1 && clearFunc();
-                // responseObj.code == -1 && setTimeout(function() {
-                //     window.location.href = './login.php';
-                // }, 500);
-                // if (responseObj.code != -1) {
-                //     submitState = 1;
-                // }
+                if (responseObj.code == 1) {
+                    setTimeout(function() {
+                        window.location.href = './admin.php';
+                    }, 500);
+                } else {
+                    submitState = 1;
+                }
             } else {
                 console.log(xhr.readyState);
             }
@@ -345,6 +348,10 @@ empty($user) && header('Location: ./login.php');
             newPasswordObj.value = '';
             newPassword = '';
         }
+        if (inputId == 'again_new_password') {
+            againNewPasswordObj.value = '';
+            againNewPassword = '';
+        }
 
         submitBtnClass = submitBtnObj.getAttribute('class');
         if (submitBtnClass == 'field') {
@@ -376,7 +383,7 @@ empty($user) && header('Location: ./login.php');
         newPassword = newPasswordObj.value;
         againNewPassword = againNewPasswordObj.value;
         submitBtnClass = submitBtnObj.getAttribute('class');
-        if (oldPassword.length > 0 && newPassword.length > 0 && againNewPasswordObj.length > 0) {
+        if (oldPassword.length > 0 && newPassword.length > 0 && againNewPassword.length > 0) {
             if (submitBtnClass == 'field disable') {
                 submitBtnObj.setAttribute('class', 'field');
             }
@@ -450,13 +457,13 @@ empty($user) && header('Location: ./login.php');
         clearIconObjs[i].addEventListener('click', clearFunc);
     }
 
-    formObj.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function (e) {
         oldPassword = oldPasswordObj.value;
         newPassword = newPasswordObj.value;
         againNewPassword = againNewPasswordObj.value;
         if (e.keyCode == 13) {
             if (oldPassword.length > 0 && newPassword.length > 0 && againNewPassword.length > 0) {
-                loginFunc(e);
+                submitFunc(e);
             } else {
                 e.preventDefault();
             }

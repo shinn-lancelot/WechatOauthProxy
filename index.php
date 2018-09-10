@@ -6,7 +6,7 @@ require __DIR__ . '/WechatOauthProxy/WechatOauth.php';
 // 限制来源
 $referer =  getReferer();
 $domain = $referer != '' ? parse_url($referer)['host'] : '';
-$code = $_GET['code'];
+$code = isset($_GET['code']) ? $_GET['code'] : '';
 $domain || $code || exit('禁止访问！');
 $file = './common/domainName.json';
 if (file_exists($file) && $domain) {
@@ -14,9 +14,9 @@ if (file_exists($file) && $domain) {
     count($domainNameArr) > 0 && !in_array($domain, $domainNameArr) && exit('禁止访问！代理接口安全域名校验出错！');
 }
 
-$proxyScope = $_REQUEST['proxy_scope'];
+$proxyScope = isset($_REQUEST['proxy_scope']) ? $_REQUEST['proxy_scope'] : '';
 $proxyScope = $proxyScope ? $proxyScope : 'code';    // 代理操作作用域，默认仅获取code 'code':仅获取code 'access_token':获取access_token及openid
-$state = $_REQUEST['state'];
+$state = isset($_REQUEST['state']) ? $_REQUEST['state'] : '';
 $state = $state ? $state : getNonceStr();
 
 // 有code且代理作用域为code，拼接code和state参数，直接跳转回请求源
@@ -30,11 +30,11 @@ if (!empty($code) && $proxyScope == 'code') {
     }
 }
 
-$appId = $_REQUEST['app_id'];
-$appSecret = $_REQUEST['app_secret'];
-$oauthType = $_REQUEST['oauth_type'];
+$appId = isset($_REQUEST['app_id']) ? $_REQUEST['app_id'] : '';
+$appSecret = isset($_REQUEST['app_secret']) ? $_REQUEST['app_secret'] : '';
+$oauthType = isset($_REQUEST['oauth_type']) ? $_REQUEST['oauth_type'] : '';
 $oauthType = $oauthType ? $oauthType : 1;   //授权类型，默认公众号授权 1:公众号授权 2:开放平台网页授权
-$scope = $_REQUEST['scope'];
+$scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : '';
 $scope = $scope ? $scope : 'snsapi_userinfo';
 
 $protocol = isHttps() ? 'https' : 'http';
@@ -42,7 +42,7 @@ $phpSelf = $_SERVER['PHP_SELF'];
 $mark = strpos($phpSelf, '?') === false ? '?' : '';
 $queryString = $proxyScope == 'access_token' ? $mark . '&' . http_build_query(array('app_id'=>$appId,'app_secret'=>$appSecret,'proxy_scope'=>$proxyScope)) : '';
 $proxyRedirectUri = $protocol . '://' . $_SERVER['HTTP_HOST'] . $phpSelf . $queryString;
-$redirectUri = $_REQUEST['redirect_uri'];
+$redirectUri = isset($_REQUEST['redirect_uri']) ? $_REQUEST['redirect_uri'] : '';
 
 // code为空，进行重定向获取code
 if (empty($code)) {
