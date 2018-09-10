@@ -6,14 +6,14 @@ require __DIR__ . '/WechatOauthProxy/WechatOauth.php';
 // 限制来源
 $referer =  getReferer();
 $domain = $referer != '' ? parse_url($referer)['host'] : '';
-$domain || exit('禁止访问！');
+$code = $_GET['code'];
+$domain || $code || exit('禁止访问！');
 $file = './common/domainName.json';
-if (file_exists($file)) {
+if (file_exists($file) && $domain) {
     $domainNameArr = json_decode(file_get_contents($file), true);
     count($domainNameArr) > 0 && !in_array($domain, $domainNameArr) && exit('禁止访问！代理接口安全域名校验出错！');
 }
 
-$code = $_GET['code'];
 $proxyScope = $_REQUEST['proxy_scope'];
 $proxyScope = $proxyScope ? $proxyScope : 'code';    // 代理操作作用域，默认仅获取code 'code':仅获取code 'access_token':获取access_token及openid
 $state = $_REQUEST['state'];
