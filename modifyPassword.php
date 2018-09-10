@@ -1,8 +1,8 @@
 <?php
 
-    session_start();
-    $user = isset($_SESSION['wop_admin_user']) ? $_SESSION['wop_admin_user'] : '';
-    empty($user) && header('Location: ./login.php');
+session_start();
+$user = isset($_SESSION['wop_admin_user']) ? $_SESSION['wop_admin_user'] : '';
+empty($user) && header('Location: ./login.php');
 
 ?>
 
@@ -13,7 +13,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>添加微信公众号授权登录域名验证文件内容</title>
+    <title>修改密码</title>
     <link rel="shortcut icon" href="./asset/image/favicon.ico">
     <link rel="stylesheet" href="./asset/css/reset.css">
     <style>
@@ -48,12 +48,6 @@
                 display: inline-block;
                 vertical-align: top;
                 overflow: hidden;
-            }
-            .logo {
-                margin: 0 auto 10vw;
-                width: 30vw;
-                height: 30vw;
-                background: url("./asset/image/oauth_proxy.png") no-repeat center / contain;
             }
             .home {
                 width: 4vw;
@@ -97,12 +91,6 @@
                 display: inline-block;
                 vertical-align: top;
                 overflow: hidden;
-            }
-            .logo {
-                margin: 0 auto calc(640px * 0.1);
-                width: calc(640px * 0.3);
-                height: calc(640px * 0.3);
-                background: url("./asset/image/oauth_proxy.png") no-repeat center / contain;
             }
             .home {
                 width: calc(640px * 0.04);
@@ -167,12 +155,12 @@
             margin: 0 2vw;
         }
 
-        #txt {
+        #domain_name {
             background: transparent;
             border-bottom: 1px solid #eee;
         }
 
-        #submit_btn, #copy, .manage-verify {
+        #submit_btn {
             color: #fff;
             background: #36a82e;
             cursor: pointer;
@@ -184,7 +172,7 @@
             user-select: none;
         }
 
-        #submit_btn p, #copy p {
+        #submit_btn p {
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
@@ -220,46 +208,47 @@
         <div class="user-box">
             <a href="./admin.php"><div class="home" title="管理页"></div></a>
             <p class="user user-size"><?php echo $user; ?></p>
-            <a href="./modifyPassword.php">
-                <p class="modify-password-btn modify-password-size">修改密码</p>
-            </a>
+            <p class="modify-password-btn modify-password-size">修改密码</p>
             <p class="logout-btn logout-size">退出登录</p>
         </div>
         <div class="box">
-            <div class="logo"></div>
             <form id="form">
                 <div class="input-box">
-                    <input type="text" class="field" name="txt" id="txt" value="" autocomplete="off" placeholder="请填写微信授权回调域名验证文件内容">
+                    <input type="text" class="field" name="old_password" id="old_password" value="" autocomplete="off" placeholder="请填写旧密码">
+                    <i class="icon icon-clear" title="移除"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" class="field" name="new_password" id="new_password" value="" autocomplete="off" placeholder="请填写新密码">
+                    <i class="icon icon-clear" title="移除"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" class="field" name="again_new_password" id="again_new_password" value="" autocomplete="off" placeholder="请再次填写新密码">
                     <i class="icon icon-clear" title="移除"></i>
                 </div>
                 <div class="field disable" id="submit_btn">
                     <p>提交</p>
-                </div>
-                <a href="./manageVerify.php">
-                    <div class="field manage-verify">
-                        <p>管理微信授权回调域名验证文件</p>
-                    </div>
-                </a>
-                <div class="field" id="copy">
-                    <p>复制微信授权回调域名</p>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="./asset/js/clipboard.min.js"></script>
 <script>
     var submitBtnObj = document.getElementById('submit_btn'),
-        txtObj = document.getElementById('txt'),
+        oldPasswordObj = document.getElementById('old_password'),
+        newPasswordObj = document.getElementById('new_password'),
+        againNewPasswordObj = document.getElementById('again_new_password'),
         xhr = '',
-        txt = '',
+        oldPassword = '',
+        newPassword = '',
+        againNewPassword = '',
         responseObj = '',
         submitState = 1,
         submitBtnClass = '',
-        txtClass = '',
-        clearIconObj = document.getElementsByClassName('icon-clear')[0],
-        redirectUrl = window.location.host,
+        oldPasswordClass = '',
+        newPasswordClass = '',
+        againNewPasswordClass = '',
+        clearIconObjs = document.getElementsByClassName('icon-clear'),
         formObj = document.getElementById('form'),
         loginoutBtnObj = document.getElementsByClassName('logout-btn')[0],
         logoutState = 1;
@@ -277,26 +266,42 @@
         }
         submitState = 0;
 
-        txt = txtObj.value;
-        if (txt == '') {
-            alert('请填写验证文件txt中的内容！');
+        oldPassword = oldPasswordObj.value;
+        if (oldPassword == '') {
+            alert('请填写旧密码！');
             return;
         }
+        newPassword = newPasswordObj.value;
+        if (newPassword == '') {
+            alert('请填写新密码！');
+            return;
+        }
+        againNewPassword = againNewPasswordObj.value;
+        if (againNewPassword == '') {
+            alert('请再次填写新密码！');
+            return;
+        }
+        if (newPassword != againNewPassword) {
+            alert('两次输入的新密码不一致！请重新填写！');
+            newPasswordObj.value = '';
+            againNewPasswordObj.value = '';
+            return
+        }
 
-        xhr.open('post', './common/verifyHandle.php', true);
+        xhr.open('post', './common/modifyPasswordHandle.php', true);
         xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-        xhr.send('txt=' + txt);
+        xhr.send('oldPassword=' + oldPassword + '&newPassword=' + newPassword + '&againNewPassword=' + againNewPassword);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 responseObj = JSON.parse(xhr.response);
                 alert(responseObj.message);
-                responseObj.code == 1 && clearFunc();
-                responseObj.code == -1 && setTimeout(function() {
-                    window.location.href = './login.php';
-                }, 500);
-                if (responseObj.code != -1) {
-                    submitState = 1;
-                }
+                // responseObj.code == 1 && clearFunc();
+                // responseObj.code == -1 && setTimeout(function() {
+                //     window.location.href = './login.php';
+                // }, 500);
+                // if (responseObj.code != -1) {
+                //     submitState = 1;
+                // }
             } else {
                 console.log(xhr.readyState);
             }
@@ -331,79 +336,131 @@
     }
 
     var clearFunc = function (e) {
-        txtObj.value = '';
-        txt = '';
+        var inputId = this.previousElementSibling.getAttribute('id');
+        if (inputId == 'old_password') {
+            oldPasswordObj.value = '';
+            oldPassword = '';
+        }
+        if (inputId == 'new_password') {
+            newPasswordObj.value = '';
+            newPassword = '';
+        }
+
         submitBtnClass = submitBtnObj.getAttribute('class');
         if (submitBtnClass == 'field') {
             submitBtnObj.setAttribute('class', 'field disable');
         }
-        clearIconObj.style.display = 'none';
         submitBtnObj.removeEventListener('click', submitFunc);
+        this.style.display = 'none';
     }
+
+    oldPasswordObj.addEventListener('input', function (e) {
+        listenInput();
+    });
+
+    newPasswordObj.addEventListener('input', function (e) {
+        listenInput();
+    });
+
+    againNewPasswordObj.addEventListener('input', function (e) {
+        listenInput();
+    });
 
     loginoutBtnObj.addEventListener('click', function(e) {
         confirm('您确定要退出吗？') && logout(e);
     });
 
-    txtObj.addEventListener('input', function (e) {
+    function listenInput() {
         submitBtnObj.removeEventListener('click', submitFunc);
-        txt = txtObj.value;
+        oldPassword = oldPasswordObj.value;
+        newPassword = newPasswordObj.value;
+        againNewPassword = againNewPasswordObj.value;
         submitBtnClass = submitBtnObj.getAttribute('class');
-        if (txt.length > 0) {
+        if (oldPassword.length > 0 && newPassword.length > 0 && againNewPasswordObj.length > 0) {
             if (submitBtnClass == 'field disable') {
                 submitBtnObj.setAttribute('class', 'field');
             }
-            clearIconObj.style.display = 'block';
             submitBtnObj.addEventListener('click', submitFunc);
         } else {
             if (submitBtnClass == 'field') {
                 submitBtnObj.setAttribute('class', 'field disable');
             }
-            clearIconObj.style.display = 'none';
             submitBtnObj.removeEventListener('click', submitFunc);
         }
-    });
+        if (oldPassword.length > 0) {
+            oldPasswordObj.nextElementSibling.style.display = 'block';
+        } else {
+            oldPasswordObj.nextElementSibling.style.display = 'none';
+        }
+        if (newPassword.length > 0) {
+            newPasswordObj.nextElementSibling.style.display = 'block';
+        } else {
+            newPasswordObj.nextElementSibling.style.display = 'none';
+        }
+        if (againNewPassword.length > 0) {
+            againNewPasswordObj.nextElementSibling.style.display = 'block';
+        } else {
+            againNewPasswordObj.nextElementSibling.style.display = 'none';
+        }
+    }
 
-    txtObj.addEventListener('focusin', function (e) {
-        txtClass = txtObj.getAttribute('class');
-        if (txtClass == 'field') {
-            txtObj.setAttribute('class', 'field line');
+    oldPasswordObj.addEventListener('focusin', function (e) {
+        oldPasswordClass = this.getAttribute('class');
+        if (oldPasswordClass == 'field') {
+            this.setAttribute('class', 'field line');
         }
     });
 
-    txtObj.addEventListener('focusout', function (e) {
-        txtClass = txtObj.getAttribute('class');
-        if (txtClass == 'field line') {
-            txtObj.setAttribute('class', 'field');
+    newPasswordObj.addEventListener('focusin', function (e) {
+        newPasswordClass = this.getAttribute('class');
+        if (newPasswordClass == 'field') {
+            this.setAttribute('class', 'field line');
         }
     });
-    
-    clearIconObj.addEventListener('click', clearFunc);
+
+    againNewPasswordObj.addEventListener('focusin', function (e) {
+        againNewPasswordClass = this.getAttribute('class');
+        if (againNewPasswordClass == 'field') {
+            this.setAttribute('class', 'field line');
+        }
+    });
+
+    oldPasswordObj.addEventListener('focusout', function (e) {
+        oldPasswordClass = this.getAttribute('class');
+        if (oldPasswordClass == 'field line') {
+            this.setAttribute('class', 'field');
+        }
+    });
+
+    newPasswordObj.addEventListener('focusout', function (e) {
+        newPasswordClass = this.getAttribute('class');
+        if (newPasswordClass == 'field line') {
+            this.setAttribute('class', 'field');
+        }
+    });
+
+    againNewPasswordObj.addEventListener('focusout', function (e) {
+        againNewPasswordClass = this.getAttribute('class');
+        if (againNewPasswordClass == 'field line') {
+            this.setAttribute('class', 'field');
+        }
+    });
+
+    for (var i = 0; i < clearIconObjs.length; i++) {
+        clearIconObjs[i].addEventListener('click', clearFunc);
+    }
 
     formObj.addEventListener('keydown', function (e) {
-        txt = txtObj.value;
+        oldPassword = oldPasswordObj.value;
+        newPassword = newPasswordObj.value;
+        againNewPassword = againNewPasswordObj.value;
         if (e.keyCode == 13) {
-            if (txt.length > 0) {
-                submitFunc(e);
+            if (oldPassword.length > 0 && newPassword.length > 0 && againNewPassword.length > 0) {
+                loginFunc(e);
             } else {
                 e.preventDefault();
             }
         }
-    });
-
-    var copy = new ClipboardJS('#copy', {
-        text: function() {
-            return redirectUrl;
-        }
-    });
-    copy.on("success",function(e){
-        alert('复制成功！');
-        console.log(e.text);
-        e.clearSelection();
-    });
-    copy.on("error",function(e){
-        alert('复制失败！');
-        console.log(e.action);
     });
 </script>
 </body>

@@ -27,7 +27,7 @@
                 right: 2.5vw;
                 cursor: pointer;
             }
-            .user-size, .logout-size {
+            .user-size, .modify-password-size, .logout-size {
                 height: 4vw;
                 line-height: 4vw;
                 font-size: 3vw;
@@ -81,7 +81,7 @@
                 right: calc(640px * 0.025);
                 cursor: pointer;
             }
-            .user-size, .logout-size {
+            .user-size, .modify-password-size, .logout-size {
                 height: calc(640px * 0.04);
                 line-height: calc(640px * 0.04);
                 font-size: calc(640px * 0.03);
@@ -158,10 +158,11 @@
             color: #36a82e;
         }
 
-        .logout-btn {
+        .modify-password-btn, .logout-btn {
             color: #ddd;
             text-decoration: underline;
             cursor: pointer;
+            user-select: none;
         }
 
         .box {
@@ -190,6 +191,9 @@
         <div class="user-box">
             <a href="./verify.php"><div class="back" title="返回"></div></a>
             <p class="user user-size"><?php echo $user; ?></p>
+            <a href="./modifyPassword.php">
+                <p class="modify-password-btn modify-password-size">修改密码</p>
+            </a>
             <p class="logout-btn logout-size">退出登录</p>
         </div>
         <div class="box">
