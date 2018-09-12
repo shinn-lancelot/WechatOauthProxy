@@ -63,14 +63,14 @@
 * 为了安全性，请及时修改管理员密码。
 * 管理员账号密码保存在common/user.json中。虽然密码已加密，为确保信息安全，建议使用Web服务器（比如apache、nginx）限制用户直接请求json文件。
 <br>
-> apache（httpd.conf）
+###### apache（httpd.conf）
 ```
 <FilesMatch \.(json)$>
     Order allow,deny
     Deny from all
 </FilesMatch>
 ```
-> nginx（nginx.conf）
+###### nginx（nginx.conf）
 ```
 location ~ .*\.(json)$ {
     deny all
@@ -81,3 +81,13 @@ location ~ .*\.(json)$ {
 
 ##### 使用的是微信公众测试号的授权登录接口，仅供测试学习。进入后请先识别二维码关注测试号（测试号粉丝上限为100个）。<br>代理端url：http://wxoauth.hillpy.com/index.php<br>请求端url：http://test.hillpy.com/wxoauth/index.php<br>
 ![test](http://qr.liantu.com/api.php?text=http://test.hillpy.com/wxoauth/index.php&w=300)
+
+### 仓库地址
+
+[Coding](https://coding.net/u/shinn_lancelot/p/WechatOauthProxy/git "WechatOauthProxy")<br>
+[Gitee](https://gitee.com/shinn_lancelot/WechatOauthProxy "WechatOauthProxy")<br>
+[Github](https://github.com/shinn-lancelot/WechatOauthProxy "WechatOauthProxy")<br>
+
+### 协议
+
+[MIT](https://github.com/shinn-lancelot/WechatOauthProxy/blob/master/LICENSE "MIT")<br>
