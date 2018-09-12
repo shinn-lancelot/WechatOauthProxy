@@ -39,19 +39,19 @@
 
 * 获取code
 
-1. 代理项目地址为 "http://oauth.xx.com/index.php"。
-2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"。
-3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"。
-4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?code=CODE&state=STATE"。
-5. 获取到code后，再通过微信授权登录接口获取access_token、获取用户信息即可。
+    1. 代理项目地址为 "http://oauth.xx.com/index.php"。
+    2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"。
+    3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&redirect_uri=REDIRECT_URI"。
+    4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?code=CODE&state=STATE"。
+    5. 获取到code后，再通过微信授权登录接口获取access_token、获取用户信息即可。
 
 * 获取access_token
 
-1. 代理项目地址为 "http://oauth.xx.com/index.php"。
-2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"
-3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy_scope=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"。
-4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?access_token=ACCESS_TOKEN&openid=OPENID"。
-5. 后续根据微信授权登录接口用access_token及openid获取用户信息即可。
+    1. 代理项目地址为 "http://oauth.xx.com/index.php"。
+    2. 首先必须将公众号授权回调域名设置为 "oauth.xx.com"
+    3. 在 "http://request.xx.com/index.php" 页面内请求代理地址： "http://oauth.xx.com/index.php?app_id=APPID&scope=SCOPE&proxy_scope=access_token&app_secret=APPSECRET&redirect_uri=REDIRECT_URI"。
+    4. 正常情况下最终将跳转到 "http://request.xx.com/index.php?access_token=ACCESS_TOKEN&openid=OPENID"。
+    5. 后续根据微信授权登录接口用access_token及openid获取用户信息即可。
 
 
 ### 其它说明
@@ -62,6 +62,7 @@
 * 后台可以添加接口调用安全域名（即请求来源，仅安全域名下的请求可正常进行接口调用）。不添加安全域名无限制。
 * 为了安全性，请及时修改管理员密码。
 * 管理员账号密码保存在common/user.json中。虽然密码已加密，为确保信息安全，建议使用Web服务器（比如apache、nginx）限制用户直接请求json文件。
+
     ###### apache（httpd.conf）
     ```
     <FilesMatch \.(json)$>
@@ -69,6 +70,7 @@
         Deny from all
     </FilesMatch>
     ```
+    
     ###### nginx（nginx.conf）
     ```
     location ~ .*\.(json)$ {
