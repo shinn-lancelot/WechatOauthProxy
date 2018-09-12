@@ -62,15 +62,18 @@
 * 后台可以添加接口调用安全域名（即请求来源，仅安全域名下的请求可正常进行接口调用）。不添加安全域名无限制。
 * 为了安全性，请及时修改管理员密码。
 * 管理员账号密码保存在common/user.json中。虽然密码已加密，为确保信息安全，建议使用Web服务器（比如apache、nginx）限制用户直接请求json文件。
-<br>
-###### apache（httpd.conf）
+
+###### apache(httpd.conf)
+
 ```
 <FilesMatch \.(json)$>
     Order allow,deny
     Deny from all
 </FilesMatch>
 ```
-###### nginx（nginx.conf）
+
+###### nginx(nginx.conf)
+
 ```
 location ~ .*\.(json)$ {
     deny all
