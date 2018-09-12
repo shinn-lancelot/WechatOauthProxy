@@ -298,11 +298,13 @@ empty($user) && header('Location: ./login.php');
             if (xhr.readyState == 4) {
                 responseObj = JSON.parse(xhr.response);
                 alert(responseObj.message);
-                if (responseObj.code == 1) {
-                    setTimeout(function() {
-                        window.location.href = './admin.php';
-                    }, 500);
-                } else {
+                responseObj.code == 1 && setTimeout(function() {
+                    window.location.href = './admin.php';
+                }, 500);
+                responseObj.code == -1 && setTimeout(function() {
+                    window.location.href = './login.php';
+                }, 500);
+                if (responseObj.code != -1) {
                     submitState = 1;
                 }
             } else {

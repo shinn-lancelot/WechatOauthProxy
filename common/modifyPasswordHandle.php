@@ -4,6 +4,15 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
     $res['code'] = 0;
     $res['message'] = '修改失败！';
 
+    session_start();
+    $user = isset($_SESSION['wop_admin_user']) ? $_SESSION['wop_admin_user'] : '';
+    if (empty($user)) {
+        $res['code'] = -1;
+        $res['message'] = '登陆过期！';
+        echo json_encode($res);
+        exit();
+    }
+
     $user = isset($_POST['user']) ? $_POST['user'] : '';
     $oldPassword = isset($_POST['old_password']) ? strip_tags(trim($_POST['old_password'])) : '';
     $newPassword = isset($_POST['new_password']) ? strip_tags(trim($_POST['new_password'])) : '';
