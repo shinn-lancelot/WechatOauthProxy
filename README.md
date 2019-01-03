@@ -1,9 +1,14 @@
-# 微信授权登录代理转发
+<h3 style="text-align:center;font-weight: 300;" align="center">
+  <img src="http://resource.hillpy.com/image/oauth_proxy.png" alt="WechatOauthProxy" width="20%;">
+</h3>
 
-[![issue](https://img.shields.io/github/issues/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy/issues)
-[![star](https://img.shields.io/github/stars/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy)
-[![fork](https://img.shields.io/github/forks/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy)
-[![license](https://img.shields.io/github/license/shinn-lancelot/WechatOauthProxy.svg)](https://github.com/shinn-lancelot/WechatOauthProxy/blob/master/LICENSE)
+<p align="center">
+    <a href="https://github.com/shinn-lancelot/WechatOauthProxy/issues"><img src="https://img.shields.io/github/issues/shinn-lancelot/WechatOauthProxy.svg" alt="Issues"></a>
+    <a href="https://github.com/shinn-lancelot/WechatOauthProxy"><img src="https://img.shields.io/github/stars/shinn-lancelot/WechatOauthProxy.svg" alt="Star"></a>
+    <a href="https://github.com/shinn-lancelot/WechatOauthProxy"><img src="https://img.shields.io/github/forks/shinn-lancelot/WechatOauthProxy.svg" alt="Fork"></a>
+    <a href="https://github.com/shinn-lancelot/WechatOauthProxy/blob/master/LICENSE"><img src="https://img.shields.io/github/license/shinn-lancelot/WechatOauthProxy.svg" alt="License"></a>
+    <a href="https://github.com/shinn-lancelot/WechatOauthProxy/releases"><img src="https://img.shields.io/github/release/shinn-lancelot/WechatOauthProxy.svg" alt="Github Release"></a>
+</p>
 
 ### 核心功能
 
