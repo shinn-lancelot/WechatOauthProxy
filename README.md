@@ -1,6 +1,6 @@
-<h3 style="text-align:center;font-weight: 300;" align="center">
-  <img src="http://resource.hillpy.com/image/oauth_proxy.png" alt="WechatOauthProxy" width="20%;">
-</h3>
+<p style="text-align: center;">
+  <img src="http://resource.hillpy.com/image/oauth_proxy.png" alt="WechatOauthProxy" style="width: 20%;">
+</p>
 
 <p align="center">
     <a href="https://github.com/shinn-lancelot/WechatOauthProxy/issues"><img src="https://img.shields.io/github/issues/shinn-lancelot/WechatOauthProxy.svg" alt="Issues"></a>
