@@ -1,5 +1,5 @@
 <p style="text-align: center;">
-  <img src="http://resource.hillpy.com/image/oauth_proxy.png" alt="WechatOauthProxy" style="width: 20%;">
+  <img src="http://resource.hillpy.com/image/oauth_proxy.png" alt="WechatOauthProxy" width="150">
 </p>
 
 <p align="center">
