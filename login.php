@@ -2,7 +2,7 @@
 
     session_start();
     $user = isset($_SESSION['wop_admin_user']) ? $_SESSION['wop_admin_user'] : '';
-    empty(!$user) && header('Location: ./admin.php');
+    !empty($user) && header('Location: ./admin.php');
 
 ?>
 
