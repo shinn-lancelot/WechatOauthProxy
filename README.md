@@ -92,9 +92,8 @@ location ~ .*\.(json)$ {
 
 ### 仓库地址
 
-[Coding](https://coding.net/u/shinn_lancelot/p/WechatOauthProxy/git "WechatOauthProxy")<br>
-[Gitee](https://gitee.com/shinn_lancelot/WechatOauthProxy "WechatOauthProxy")<br>
 [Github](https://github.com/shinn-lancelot/WechatOauthProxy "WechatOauthProxy")<br>
+[Gitee](https://gitee.com/shinn_lancelot/WechatOauthProxy "WechatOauthProxy")<br>
 
 ### 协议
 
